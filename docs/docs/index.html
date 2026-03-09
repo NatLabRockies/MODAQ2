@@ -13,8 +13,11 @@
         <link rel="next" href="github/">
       
       
+        
+      
+      
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
       
@@ -22,10 +25,10 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.84d31ad4.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.618322db.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -50,7 +53,6 @@
     
       
 
-    
     
     
   </head>
@@ -244,9 +246,14 @@
   
   
   <span class="md-ellipsis">
+    
+  
     Home
+  
+
     
   </span>
+  
   
 
           <span class="md-nav__icon md-icon"></span>
@@ -257,9 +264,14 @@
   
   
   <span class="md-ellipsis">
+    
+  
     Home
+  
+
     
   </span>
+  
   
 
       </a>
@@ -282,7 +294,9 @@
         <li class="md-nav__item">
   <a href="#motivation" class="md-nav__link">
     <span class="md-ellipsis">
-      Motivation
+      
+        Motivation
+      
     </span>
   </a>
   
@@ -291,7 +305,9 @@
         <li class="md-nav__item">
   <a href="#m2-goals-and-design-requirements" class="md-nav__link">
     <span class="md-ellipsis">
-      M2 Goals and Design Requirements
+      
+        M2 Goals and Design Requirements
+      
     </span>
   </a>
   
@@ -317,9 +333,14 @@
   
   
   <span class="md-ellipsis">
+    
+  
     Github
+  
+
     
   </span>
+  
   
 
       </a>
@@ -339,9 +360,14 @@
   
   
   <span class="md-ellipsis">
+    
+  
     Hardware
+  
+
     
   </span>
+  
   
 
       </a>
@@ -361,9 +387,14 @@
   
   
   <span class="md-ellipsis">
+    
+  
     Software
+  
+
     
   </span>
+  
   
 
       </a>
@@ -383,9 +414,14 @@
   
   
   <span class="md-ellipsis">
+    
+  
     Technical Reference
+  
+
     
   </span>
+  
   
 
       </a>
@@ -405,9 +441,14 @@
   
   
   <span class="md-ellipsis">
+    
+  
     HMI
+  
+
     
   </span>
+  
   
 
       </a>
@@ -427,9 +468,14 @@
   
   
   <span class="md-ellipsis">
+    
+  
     Configurator
+  
+
     
   </span>
+  
   
 
       </a>
@@ -449,9 +495,14 @@
   
   
   <span class="md-ellipsis">
+    
+  
     Useful Links
+  
+
     
   </span>
+  
   
 
       </a>
@@ -488,7 +539,9 @@
         <li class="md-nav__item">
   <a href="#motivation" class="md-nav__link">
     <span class="md-ellipsis">
-      Motivation
+      
+        Motivation
+      
     </span>
   </a>
   
@@ -497,7 +550,9 @@
         <li class="md-nav__item">
   <a href="#m2-goals-and-design-requirements" class="md-nav__link">
     <span class="md-ellipsis">
-      M2 Goals and Design Requirements
+      
+        M2 Goals and Design Requirements
+      
     </span>
   </a>
   
@@ -513,6 +568,7 @@
           
           
             <div class="md-content" data-md-component="content">
+              
               <article class="md-content__inner md-typeset">
                 
                   
@@ -522,9 +578,9 @@
 <h1 id="modaq-2-reference-design">MODAQ 2 Reference Design<img align="right" src="img/MODAQ_Logo.png"><a class="headerlink" href="#modaq-2-reference-design" title="Permanent link">&para;</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>These documents are still under development. Please contact the open-water testing support team at NLR for more information. <a href="https://www.nrel.gov/water/open-water-testing.html" target="_blank">Contact Us</a></p>
+<p>These documents are still under development. Please contact the open-water testing support team at NLR for more information. <a href="https://www.nlr.gov/water/open-water-testing.html" target="_blank">Contact Us</a></p>
 </div>
-<p>The National Laboratory of the Rockies' (NLR) first generation <a href="https://nrel.github.io/MODAQ/" target="_blank">MODAQ</a> (Modular Open-source Data AcQuisition) is a highly performant, capable, and extensible platform for data acquisition, control, and automation that is based on the National Instruments cRIO controller line and family of expansion chassis and I/O modules. While MODAQ v1.0 (M1, hereafter) has proven itself in both the field and laboratory, several factors have indicated the need for additional solutions that were not well served on the M1 architecture, which led to the development of MODAQ 2 (M2). M2 is an approach based on generally available hardware and open-source development tools. </p>
+<p>The National Laboratory of the Rockies' (NLR) first generation <a href="https://natlabrockies.github.io/MODAQ/" target="_blank">MODAQ</a> (Modular Open-source Data AcQuisition) is a highly performant, capable, and extensible platform for data acquisition, control, and automation that is based on the National Instruments cRIO controller line and family of expansion chassis and I/O modules. While MODAQ v1.0 (M1, hereafter) has proven itself in both the field and laboratory, several factors have indicated the need for additional solutions that were not well served on the M1 architecture, which led to the development of MODAQ 2 (M2). M2 is an approach based on generally available hardware and open-source development tools. </p>
 <h2 id="motivation">Motivation<a class="headerlink" href="#motivation" title="Permanent link">&para;</a></h2>
 <p>Before diving too deeply into the details, it's important to understand the motivation behind M2. There were several reasons, but they all boil down to either: </p>
 <ol>
@@ -607,10 +663,11 @@
     
     
       
-      <script id="__config" type="application/json">{"base": ".", "features": ["content.code.copy"], "search": "assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["content.code.copy"], "search": "assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.f55a23d4.min.js"></script>
+      <script src="assets/javascripts/bundle.e71a0d61.min.js"></script>
       
     
   </body>

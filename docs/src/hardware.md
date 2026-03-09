@@ -137,7 +137,7 @@ These provide the following capabilities:
 
     The devices listed will work on either controller mentioned in the previous section.
 
-M2 supports considerably more hardware options than are included in the Reference Design distribution. <a href="mailto:water.power@nrel.gov?subject=MODAQ2%20Inquiry" target="_blank">Contact us</a> to learn more. 
+M2 supports considerably more hardware options than are included in the Reference Design distribution. <a href="https://www.nlr.gov/water/open-water-testing" target="_blank">Contact us</a> to learn more. 
 
 ### LabJack T8
 ![Labjack T8](img/t8.png#right)

@@ -1,9 +1,9 @@
 # MODAQ 2 Reference Design<img align="right" src="img/MODAQ_Logo.png">
 
 !!! note
-    These documents are still under development. Please contact the open-water testing support team at NLR for more information. <a href="https://www.nrel.gov/water/open-water-testing.html" target="_blank">Contact Us</a>
+    These documents are still under development. Please contact the open-water testing support team at NLR for more information. <a href="https://www.nlr.gov/water/open-water-testing.html" target="_blank">Contact Us</a>
 
-The National Laboratory of the Rockies' (NLR) first generation <a href="https://nrel.github.io/MODAQ/" target="_blank">MODAQ</a> (Modular Open-source Data AcQuisition) is a highly performant, capable, and extensible platform for data acquisition, control, and automation that is based on the National Instruments cRIO controller line and family of expansion chassis and I/O modules. While MODAQ v1.0 (M1, hereafter) has proven itself in both the field and laboratory, several factors have indicated the need for additional solutions that were not well served on the M1 architecture, which led to the development of MODAQ 2 (M2). M2 is an approach based on generally available hardware and open-source development tools. 
+The National Laboratory of the Rockies' (NLR) first generation <a href="https://natlabrockies.github.io/MODAQ/" target="_blank">MODAQ</a> (Modular Open-source Data AcQuisition) is a highly performant, capable, and extensible platform for data acquisition, control, and automation that is based on the National Instruments cRIO controller line and family of expansion chassis and I/O modules. While MODAQ v1.0 (M1, hereafter) has proven itself in both the field and laboratory, several factors have indicated the need for additional solutions that were not well served on the M1 architecture, which led to the development of MODAQ 2 (M2). M2 is an approach based on generally available hardware and open-source development tools. 
 
 ## Motivation
 

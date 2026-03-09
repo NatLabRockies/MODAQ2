@@ -280,7 +280,7 @@ chart.data.datasets.forEach(dataset => {
     });
 });
 ```
-> Side Note - We typically use high quality inertial sensors in our projects and eagle-eyed readers will notice the MPU-6050 referenced in a few places in this documentation and the github repo. The MPU-6050 is a <$5 sensor that has some utility in the occasional low-cost/low demand applications (see: <a href="https://github.com/NREL/MODAQ-BB" target="_blank">MODAQ-BB</a>). 
+> Side Note - We typically use high quality inertial sensors in our projects and eagle-eyed readers will notice the MPU-6050 referenced in a few places in this documentation and the github repo. The MPU-6050 is a <$5 sensor that has some utility in the occasional low-cost/low demand applications (see: <a href="https://github.com/NatLabRockies/MODAQ-BB" target="_blank">MODAQ-BB</a>). 
 
 Similarly, handling a multivariate data object and plotting with dual y-axes took some creativity, but is simpler as long as only 2 parameters are plotted:
 
