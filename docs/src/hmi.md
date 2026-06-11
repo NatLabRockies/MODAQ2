@@ -1,17 +1,4 @@
-<style>
-    img[src*='#left'] {
-     float: left;
-    }
-    img[src*='#right'] {
-        float: right;
-    }
-    img[src*='#center'] {
-        display: block;
-        margin: auto;
-    }
-</style>
-
-# M2 HMI ![MODAQ M2 HMI Example Design](img/m2_logo.png#right)
+# M2 HMI ![MODAQ M2 HMI Example Design](img/m2_icon.png#right)
 
 </p>
 A Human-Machine Interface, or HMI, is a control panel or portal that enables high-speed, near realtime interaction with M2. It can display or plot values and allow for operator control of specifically coded elements running in M2- such as manual control of a relay. 

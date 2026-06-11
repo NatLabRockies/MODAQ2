@@ -3,12 +3,15 @@ docs_dir: 'src'
 site_dir: 'docs'
 nav:
   - Home: 'index.md'
-  - Github: 'github.md'
+  - Versions: 'versions.md'
   - Hardware: 'hardware.md'
   - Software: 'software.md'
+  - M2GO: 'm2go.md'
+  - Github: 'github.md'
   - Technical Reference: 'techref.md'
   - HMI: 'hmi.md'
   - Configurator: 'configurator.md'
+  - Q&A: 'qa.md'
   - Useful Links: 'links.md'
 markdown_extensions:
   - footnotes
@@ -25,8 +28,14 @@ markdown_extensions:
   - pymdownx.details
 theme:
   name: material
+  logo: img/m2_mark.png
+  favicon: img/MODAQ_favicon1.png
   features:
     - content.code.copy
+    - navigation.footer
+    - navigation.tabs
+    - navigation.tabs.sticky # comment this to make the navigation tabs scroll (hide) with the page instead of sticking to the top
+    - navigation.top
   palette:
     #primary: blue
     # Palette toggle for light mode
@@ -48,3 +57,5 @@ theme:
   - print-site
 extra_css:
   - stylesheets/extra.css
+extra:
+  generator: false

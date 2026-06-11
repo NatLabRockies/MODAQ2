@@ -1,13 +1,15 @@
-# MODAQ 2 Reference Design<img align="right" src="img/MODAQ_Logo.png">
+# MODAQ 2 Reference Design
+<img align="center" src="img/MODAQ_Logo2.png">
 
 !!! note
-    These documents are still under development. Please contact the open-water testing support team at NLR for more information. <a href="https://www.nlr.gov/water/open-water-testing.html" target="_blank">Contact Us</a>
+    These documents are still under development. Please contact the open-water testing support team at NLR for more information. <a href="https://www.nlr.gov/water/modaq" target="_blank">Contact Us</a>
+<p />
 
-The National Laboratory of the Rockies' (NLR) first generation <a href="https://natlabrockies.github.io/MODAQ/" target="_blank">MODAQ</a> (Modular Open-source Data AcQuisition) is a highly performant, capable, and extensible platform for data acquisition, control, and automation that is based on the National Instruments cRIO controller line and family of expansion chassis and I/O modules. While MODAQ v1.0 (M1, hereafter) has proven itself in both the field and laboratory, several factors have indicated the need for additional solutions that were not well served on the M1 architecture, which led to the development of MODAQ 2 (M2). M2 is an approach based on generally available hardware and open-source development tools. 
+The National Laboratory of the Rockies' (NLR) first generation <a href="https://natlabrockies.github.io/MODAQ/" target="_blank">MODAQ</a> (Modular Open-source Data AcQuisition) is a highly performant, capable, and extensible platform for data acquisition, control, and automation that is based on the National Instruments cRIO controller line and family of expansion chassis and I/O modules. While MODAQ v1.0 (M1, hereafter) has proven itself both in the field and laboratory, several factors have indicated the need for additional solutions that were not well served on the M1 architecture, which led to the development of MODAQ 2 (M2). M2 is an approach based on generally available hardware and open-source development tools. 
 
 ## Motivation
 
-Before diving too deeply into the details, it's important to understand the motivation behind M2. There were several reasons, but they all boil down to either: 
+Before diving too deeply into the details, it's important to understand the motivation behind M2. There were several drivers, but they all boil down to either: 
 
 1. We did not have a solution that satisfied particular project requirements, or
 2. Feedback from customers and partners 
@@ -16,7 +18,7 @@ In the case of #1, projects may have power or physical limitations that simply c
 
 With regards to feedback from the companies and organizations we frequently work with, there's often resistance to the M1 platform based on system cost or universality of the software development language- or both. 
 
-National Instruments publishes the price of its hardware on their website without the dreaded "Click for Quote" obfuscation, so it's easy to get an idea of the price range for the controller and I/O modules. With strained budgets and an eye toward the future, where an organization may be considering arrays of devices or multiple device variants, it can be questionable if the M1 platform is a good fit, particularly when considering a pivot to production. 
+National Instruments publishes the price of its hardware on their website, so it's easy to get an idea of the price range for the controller and I/O modules. With strained budgets and an eye toward the future, where an organization may be considering arrays of devices or multiple device variants, it can be questionable if the M1 platform is a good fit, particularly when considering a pivot to commercialization. 
 
 Then there's the concern about the development language. M1 is written in LabVIEW, which is National Instruments' proprietary programming language. Here the issues are mostly around subscription costs and availability of LabVIEW developers. There's no sugar-coating that annual <a href="https://www.ni.com/en/shop/labview/select-edition.html" target="_blank">subscription costs</a> for a LabVIEW Professional seat can be eye-opening- especially after bundling the Real-Time and FPGA modules. 
 

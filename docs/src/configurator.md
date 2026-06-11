@@ -1,17 +1,4 @@
-<style>
-    img[src*='#left'] {
-     float: left;
-    }
-    img[src*='#right'] {
-        float: right;
-    }
-    img[src*='#center'] {
-        display: block;
-        margin: auto;
-    }
-</style>
-
-# M2 Configurator ![MODAQ M2 Configurator Guide](img/m2_logo.png#right)
+# M2 Configurator ![MODAQ M2 Configurator Guide](img/m2_icon.png#right)
 
 </p>
 Configurator MODAQ2 Repo: <a href="https://github.com/MODAQ2/configurator" target="_blank">MODAQ2/configurator</a>

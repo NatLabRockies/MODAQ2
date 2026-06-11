@@ -1,17 +1,4 @@
-<style>
-    img[src*='#left'] {
-     float: left;
-    }
-    img[src*='#right'] {
-        float: right;
-    }
-    img[src*='#center'] {
-        display: block;
-        margin: auto;
-    }
-</style>
-
-# M2 Useful Links ![MODAQ M2 Links](img/m2_logo.png#right)
+# M2 Useful Links ![MODAQ M2 Links](img/m2_icon.png#right)
 
 !!! note
     When exploring learning material for ROS2, be wary to avoid training on ROS1 as it is quite different from ROS2. Try to stick to training specific toward ROS2 Humble Hawksbill.
@@ -41,7 +28,9 @@ NLR: [nlr.gov/water/open-water-testing.html](https://www.nlr.gov/water/open-wate
 
 ## Ubuntu
 
-</a>Installing Ubuntu 22.04: <a href="https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview" target="_blank">ubuntu.com/tutorials/install-ubuntu-desktop</a>
+Installing Ubuntu 22.04 (x86_64, AMD64): <a href="https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview" target="_blank">ubuntu.com/tutorials/install-ubuntu-desktop</a>. Download instal image <a href="https://releases.ubuntu.com/jammy/" target="_blank">here</a>
+
+<a href="https://cdimage.ubuntu.com/releases/noble/release/" target="_blank">Ubuntu 24.04 (Arm64) install image</a>. 
 
 </a>Foxglove GUI software: <a href="https://docs.foxglove.dev/docs/introduction" target="_blank">docs.foxglove.dev/docs/introduction</a>
 

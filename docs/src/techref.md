@@ -1,17 +1,4 @@
-<style>
-    img[src*='#left'] {
-     float: left;
-    }
-    img[src*='#right'] {
-        float: right;
-    }
-    img[src*='#center'] {
-        display: block;
-        margin: auto;
-    }
-</style>
-
-# M2 Technical Reference ![MODAQ M2 Tech Ref](img/m2_logo.png#right)
+# M2 Technical Reference ![MODAQ M2 Tech Ref](img/m2_icon.png#right)
 </p>
 
 

@@ -1,17 +1,4 @@
-<style>
-    img[src*='#left'] {
-     float: left;
-    }
-    img[src*='#right'] {
-        float: right;
-    }
-    img[src*='#center'] {
-        display: block;
-        margin: auto;
-    }
-</style>
-
-# M2 Github ![MODAQ Github Organization](img/m2_logo.png#right)
+# M2 Github ![MODAQ Github Organization](img/m2_icon.png#right)
 This section will discuss the layout of the MODAQ 2 codebase on Github.
 
 ## Github Organization: MODAQ2

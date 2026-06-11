@@ -1,30 +1,19 @@
-<style>
-    img[src*='#left'] {
-     float: left;
-    }
-    img[src*='#right'] {
-        float: right;
-    }
-    img[src*='#center'] {
-        display: block;
-        margin: auto;
-    }
-</style>
+# M2 Hardware ![MODAQ M2 Hardware](img/m2_icon.png#right)
 
-# M2 Hardware ![MODAQ M2 Hardware](img/m2_logo.png#right)
-
-This section will discuss the hardware supported by M2 and present a reference design (RD) example that is supported by the M2 source code provided in the <a href="https://github.com/MODAQ2" target="_blank">GitHub repository</a>. It should be noted that any hardware mentioned has been either used in or evaluated for M2 projects, however this should not be interpreted as an endorsement or approval of any mentioned hardware product by NLR. Due to the general and flexible nature of the M2 software, M2 applications are not necessarily limited to these hardware selections. 
+This section discusses the hardware supported by M2 and presents a reference design (RD) example that is supported by the M2 source code provided in the <a href="https://github.com/MODAQ2" target="_blank">GitHub repository</a>. It should be noted that any hardware mentioned has been either used in or evaluated for M2 projects, however this should not be interpreted as an endorsement or approval of any mentioned hardware product by NLR. Due to the general and flexible nature of the M2 software, M2 applications are not necessarily limited to these hardware selections. 
 
 !!! note 
 
     Reliability, durability, and suitability of hardware selections should be assessed prior to use in applications of significance. General purpose hardware may vary in design or production tolerances that can result in operational or performance differences between units and batches. 
 
 ## Hardware Reference Design
-The purpose of providing this reference design is to offer a functional demonstration of the M2 platform. Since each project tends to be unique and measurement objectives can vary considerably, there is no typical configuration that will satisfy all situations. However, there's usually significant overlap in base functionality that is common in MODAQ projects, such as: measuring analog signals, motions, position, and temperatures. 
+The purpose of providing this reference design is to offer a functional demonstration of the M2 platform. This hardware, along with the instructions in the [Software](software.md) section that follow, should yield the DIY user a properly functioning M2 build. Users seeking an "out of the box" experience, might consider our [M2GO](m2go.md) hardware loan program.
 
-The following is a diagram of the M2 Reference Design discussed in these pages.
+Since each project tends to be unique and measurement objectives can vary considerably, there is no typical configuration that will satisfy all situations. However, there's usually significant overlap in base functionality that is common in most MODAQ projects, such as: measuring analog signals, motions, position, and temperatures. 
 
-![](img/m2rd.png)
+The following is a diagram of the M2 Reference Design:
+
+![](img/m2rd_diagram.png#center)
 
 !!! success "Equipment List"
 
@@ -32,17 +21,15 @@ The following is a diagram of the M2 Reference Design discussed in these pages.
     | ----------- | ----------------- | --- | ----------------- |
     | OnLogic     | Karbon 410        |  1  | Controller        |
     | LabJack     | T8                |  1  | Multi-I/O         |
-    | Perle       | IDS-710HP[^1]     |  1  | PoE/PTP Ethernet Switch    |
-    | Cradlepoint | IBR-600C[^2]      |  1  | LTE Modem         |
+    | Netgear     | GS305             |  1  | Ethernet Switch    |
     | Adv. Nav.   | GNSS Compass      |  1  | Heading, GPS, PTP Server |
     | Xsens       | MTi-G-710         |  1  | Inertial Sensor   |
-    | Verivolt    | IsoBlock V-4c     |  1  | Voltage Sensor (PT)   |
-    | Verivolt    | IsoBlock I-ST-4c  |  1  | Current Sensor (CT)   |
     | BrainBoxes  | ED-582            |  1  | RTD to Ethernet   |
     | Samsung     | T5                |  1  | SSD Storage       |
 
+The above M2 RD is a high-performance system designed for quality measurements. It's capable of simultaneously sampling up to 8 analog channels at high-speed. The selected [T8 Multi-I/O interface](hardware.md#labjack-t8) can be configured for a variety of input types and has both analog and digital outputs for control applications. Advanced features are included in the RD software such as: user HMI, email alerting, configuration utility, data uploading, and event logging. 
 
-
+## Controller Considerations
 
 ### Modular Architecture
 
@@ -60,7 +47,12 @@ Many of the devices supported in this RD communicate with the controller over et
 
 
 ## Controller
-M2 currently supports controller hardware based on the x86_64 CPU architecture. Examples of such CPUs include the Intel Pentium, Atom, and Celeron series chips, as well as higher-powered variants in the Core series. Some considerations for CPU selection include:
+M2 supports controller hardware based on either the x86_64 (e.g. Intel, AMD64) or Arm64 CPU architectures. Examples of such CPUs include the Intel Pentium, Atom, and Celeron series chips, as well as higher-powered variants in the Core series. For Arm64, only the <a href="https://www.raspberrypi.com/products/compute-module-5/?variant=cm5-104032" target="_blank">Raspberry Pi CM5</a> has been evaluated to work with the provided M2 code. It's possible that other Arm64 based computers will work as well, though other devices have not yet been validated.
+
+!!! warning
+    Tests conducted with the Raspberry Pi Zero 2W were disappointing. It's suspected that the 512MB of SDRAM is the limiting factor, since all attempts to build the M2 code on the board failed. Building the code on another target and moving the executables to the Zero 2W was not tested. 
+
+Some considerations for CPU selection include:
 
 - Power efficiency
 - Performance expectations
@@ -80,13 +72,15 @@ Depending on the application, the main board might be sold as a Single Board Com
 - Serial communications port (RS-232/RS-485/UART)
 - Wide input voltage tolerances
 
-Depending on the operating environment, it might be desireable to select a model that is rated for a wide operational temperature and humidity range. 
+Depending on the operating environment, it might be desirable to select a model that is rated for a wide operational temperature and humidity range. 
 
 !!! note 
 
     The above features are preferred, but not mandatory. Individual use-cases and performance requirements may indicate need for greater or fewer capabilities. 
 
-The following are examples of some controller options that have been evaluated for M2.
+
+
+## Controller options that have been evaluated for M2.
 
 ### Onlogic Karbon 410
 
@@ -112,9 +106,29 @@ Some notes on the H3:
 
 - Small 110x110mm footprint
 - Dual SODIMM DDR4 RAM slots and one NVMe m.2 slot
-- PTP support on the Realtek RTL8125B ethernet controllers <a href="https://askubuntu.com/questions/1502690/realtek-rtl8125-ethernet-controller-ieee-1588-ptp-support-in-ubuntu-22-04-3" target="_blank">requires some effort</a> and not as robust as the Intel ethernet controllers.[^3]
+- PTP support on the Realtek RTL8125B ethernet controllers <a href="https://askubuntu.com/questions/1502690/realtek-rtl8125-ethernet-controller-ieee-1588-ptp-support-in-ubuntu-22-04-3" target="_blank">requires some effort</a> and not as robust as the Intel ethernet controllers.[^1]
 - Supports input power in the range of 14-20 VDC, which is a little unusual.
 - Full stress power consumption is ~18W and <1W in suspend mode
+
+### Raspberry Pi CM-5
+Raspberry Pi <a href="https://investors.raspberrypi.com/" target="_blank">claims</a> that approximately 75% of its sales are to the Industrial and Embedded sector and their devices are found <a href="https://www.raspberrypi.com/for-industry/powered-by/" target="_blank">powering</a> a variety of devices in assorted applications that are similar or adjacent to MODAQ. Robustness and dependability are important to us, and is one of our stated design requirements, therefore we're cautiously optimistic when it comes to the CM5. Our experience thus far has been positive, however users are encouraged to perform their own evaluations and weigh the risks. 
+
+![CM5](img/cm5_carrier.png#right)
+The CM5 is a credit-card sized microcomputer that needs to be inserted into a carrier or expansion board in order to expose the I/O, communications, storage, and power connections. This can increase the overall footprint and power draw, but since the CM5 is basically useless without a carrier board, they must be assessed together when evaluating options. In our tests, the CM5 with the <a href="https://www.raspberrypi.com/products/compute-module-5-io-board/" target="_blank">OEM carrier board</a> power draw under MODAQ operation was measured around 3 watts (NOTE: this power consumption value is just for the controller, not including any external peripherals such as the LabJack T8).
+
+Notable features:
+
+- NVMe support on the OEM carrier board
+- Hardware PTP support
+- Onboard RTC with battery backup
+- Compatible with Raspberry Pi HATs
+- 3rd party carrier boards and industrial housings available for greater flexibility
+
+Notable disappointments:
+
+- No low power idle mode or hibernation/sleep
+- OEM carrier board is rather large (160 x 90mm) and only has one ethernet port
+- Published MTBF (Mean Time Between Failure) under high stress environmental conditions is 16k hours (~2 years). MTBF is closer to 10 years in stable, controlled conditions. (to be fair, we could not find published MTBF for the Karbon 410 nor the ODROID H3. The Karbon 410 does meet a variety of IEC and MIL-STD shock and vibration standards)
 
 ## Sensors, Instruments, and I/O Options
 
@@ -173,7 +187,7 @@ The M2 reference design includes support for the <a href="https://www.advancedna
 
 This device is a compliment to the Xsens Mti-G-710, since the GNSS Compass, with it's dual antennas can provide a superior heading estimate and with an RTK correction signal available, can provide can provide superior positioning estimates. In addition, it can provide an estimate of heave and provides a highly accurate time reference for the M2 system. 
 
+### Networking
 
-[^1]: Cheaper unmanaged switches could be substituted if PTP and/or PoE support not desired.
-[^2]: IBR-600C has been recently discontinued. S700 looks like the most likely replacement.
-[^3]: The newly released ODROID H4 comes with <a href="https://www.intel.com/content/www/us/en/products/sku/210599/intel-ethernet-controller-i226v/specifications.html" target="_blank">Intel I226-V</a> ethernet controller chips, which have much better PTP support.
+
+[^1]: The newly released ODROID H4 comes with <a href="https://www.intel.com/content/www/us/en/products/sku/210599/intel-ethernet-controller-i226v/specifications.html" target="_blank">Intel I226-V</a> ethernet controller chips, which have much better PTP support.

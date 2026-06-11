@@ -1,40 +1,99 @@
-<style>
-    img[src*='#left'] {
-     float: left;
-    }
-    img[src*='#right'] {
-        float: right;
-    }
-    img[src*='#center'] {
-        display: block;
-        margin: auto;
-    }
-</style>
-
-# M2 Software ![MODAQ M2 Software](img/m2_logo.png#right)
+# M2 Software ![MODAQ M2 Software](img/m2_icon.png#right)
 This section will discuss the software architecture of the M2 and explain the reference design available on the NLR GitHub at <a href="https://github.com/NatLabRockies/MODAQ2" target="_blank">MODAQ2</a>. For discussion on design decisions and details on technical aspects of the software design, please see the Technical Reference page.
 
 ### Introduction
 M2 has been designed around the ROS2 ecosystem of libraries and tools to provide users a well established way of developing a data acquisition system. ROS2 was selected because it is easy to learn with many free online training resources, completely free and open-source, supports multiple programming languages, and is reliable for long term use in industrial settings. There is also a plethora of already existing ROS packages that users can leverage in addition to the packages developed in the MODAQ 2 project.
 
-The MODAQ 2 project is the amalgamation of ROS packages, tools, and guidance for developing data acquisition and control applications for marine energy devices using a ROS based architecture. The MODAQ 2 Reference Design includes several packages that are targeted for the marine energy sector and allow most developers with a basic background in programming to spin up a high-quality DAQ and control system.
+The MODAQ 2 project is the amalgamation of ROS packages, tools, and guidance for developing data acquisition and control applications for marine energy devices using a ROS based architecture. The MODAQ 2 Reference Design includes several packages that are targeted for laboratory and field applications and allow most developers with a basic background in programming to spin up a high-quality DAQ and control system.
 
 The main software aspects of MODAQ 2 are as follows:
 
 - Ubuntu Linux Operating System
-- RO2 Humble Hawksbill
+- RO2 Humble Hawksbill (or Jazzy Jalisco for Arm64)
 - Externally Developed ROS Packages
 - MODAQ 2 Custom and Internally Developed ROS Packages
 - Third Party DAQ Driver libraries
 
+## Ubuntu Operating System
+Ubuntu is a free to use (for most applications) Linux distribution and has the best support for the ROS ecosystem. To get started working in Ubuntu, it is recommended to visit the [Hardware page](hardware.md) of this document to ensure that your controller meets the requirements of the MODAQ 2 design. After that, you can follow the instructions provided in [Useful Links](links.md#ubuntu) to install the correct version of Ubuntu Desktop on your controller. At the present time, select Ubuntu 22.04 Desktop for x86_64 (Intel and AMD64) controllers and Ubuntu 24.04 for Arm64. 
+
 !!! note
-    It may be possible to run MODAQ 2 on newer versions of Ubuntu and ROS2 but they are not currently tested and supported.
+    Ubuntu 24.04 <a href="https://forums.raspberrypi.com/viewtopic.php?t=359566#p2157713" target="_blank">officially supports</a> the Raspberry Pi CM5 hardware. Since ROS2 released tend to be tied to specific Ubuntu versions, Arm64 applications will need to use ROS2 Jazzy instead of Humble. 
 
-## Ubuntu 22.04 LTS
-Because ROS2 Humble was selected as the ROS ecosystem, it is highly recommended that users work in the Ubuntu 22.04 operating system. Ubuntu is a free to use (for most applications) Linux distribution and has the best support for the ROS ecosystem. To get started working in Ubuntu, it is recommended to visit the [Hardware page](hardware.md) of this document to ensure that your controller meets the requirements of the MODAQ 2 design. After that, you can follow the instructions provided in [Useful Links](links.md#ubuntu) to install Ubuntu 22.04 Desktop on your controller.
+    M2 was originally written for x86_64 controllers with Ubuntu 22.04 and ROS2 Humble. We have yet to validate 24.04 with ROS2 Jazzy on x86_64. Regardless, installation and setup instructions are the same, with the exception of selecting the appropriate installers.   
 
-## ROS2 Humble Hawksbill
-<img src="../img/source_OSRF_ROS2_Humble_410x500.png" alt="OSRF ROS Humble Image" width="200" style="float: right; margin-left: 10px;"/>The Robotic Operating System (ROS) is a collection of middleware, libraries and tools that were designed to benefit the robotics development community. The qualities of ROS that benefit the robotics community also benefit the data acquisition and control for marine energy community. It provides an easy entry point for software development for data acquisition control but it also is very scalable and has the capabilities to do very advanced computational tasks if needed for a project. For example, after installing the ros-humble-desktop and MODAQ 2 packages, you can quickly run a process that collects and logs sensor data in mcap bag files for data analysis. However, if you need to build code that is deterministic or real-time, this is also possible with ROS but requires a much lower level understanding of computer programming and is likely not necessary for many applications. In summary, ROS is adaptable and extensible to meet the requirements of a data acquisition and control project.
+### Installing Ubuntu 22.04 on x86_64 Controllers
+The easiest way to install Ubuntu on a x86_64 controller is to <a href="https://ubuntu.com/desktop/docs/en/latest/how-to/create-a-bootable-usb-stick/#create-a-bootable-usb-stick" target="_blank">create the installer on a USB stick</a>. 
+
+1. Download either the Desktop or Server install image <a href="https://releases.ubuntu.com/jammy/" target="_blank">here</a>.
+
+    !!! question "Ubuntu Desktop or Server?"
+        Either Ubuntu Desktop or Server edition can be used with M2. 
+
+        **Choose Desktop if:** you might want to connect a keyboard, mouse, and monitor the controller and rather work in a graphical desktop environment. This option will install a number of apps that may or may not be useful, such as LibreOffice. This will consume more space on your OS install target and require at least 4GB of RAM.
+
+        **Choose Server if:** you are comfortable working in the command line interface (AKA terminal/console). While this a bit more complex, the command line is used extensively with M2 and ROS2, so there's no avoiding it. Desktop features can be installed in Server if so desired.
+
+2. Install a USB writer utility, such as <a href="https://etcher.balena.io/" target="_blank">BalenaEtcher</a>, which is available for Windows, Linux, and MacOS hosts. (NOTE: Ubuntu has a creation tool built in:  Startup Disk Creator. So you can skip this step)
+3. Burn/etch the Ubuntu 22.04 file downloaded in Step 1 to a blank USB stick.
+4. Place the newly etched USB stick in a USB port on the controller target and boot from the stick. 
+
+    !!! note
+        Most x86_84 based controllers should be set to automatically boot from USB media, however if this does not happen, it may be necessary to go into BIOS and change the boot order so that the USB ports are prioritized. This process varies from manufacturer to manufacturer, so consult documentation for your controller if unsure how to do this.
+
+5. Follow onscreen instructions to install the OS to the desired location on the controller. 
+
+### Installing Ubuntu 24.04 on Arm64 Controllers
+There are a couple methods of installing an OS to a CM5, which to chose will depend on the version of the CM5 you have and where you want the OS to be installed. We chose CM5s with onboard eMMC storage and installed the OS there. We could have opted to install the OS to the NVMe SSD drive, however we prefer to use the SSD for data only. If the OS and data reside on the same drive, it's more involved to swap the drive (for instance, it might be desirable to quickly replace a full drive with an empty one in the field), since the OS will need to be cloned to the new drive. Lite variants of the CM5 (those without eMMC) could have the OS installed to a microSD card.
+
+Download the Ubuntu 24.04 Desktop install image <a href="https://cdimage.ubuntu.com/releases/noble/release/ubuntu-24.04.4-preinstalled-desktop-arm64+raspi.img.xz">here</a> or Server image <a href="https://cdimage.ubuntu.com/releases/noble/release/ubuntu-24.04.4-preinstalled-server-arm64+raspi.img.xz">here</a>.
+
+!!! question "Ubuntu Desktop or Server?"
+    Either Ubuntu Desktop or Server edition can be used with M2. 
+
+    **Choose Desktop if:** you might want to connect a keyboard, mouse, and monitor the controller and rather work in a graphical desktop environment. This option will install a number of apps that may or may not be useful, such as LibreOffice. This will consume more space on your OS install target and require at least 4GB of RAM.
+
+    **Choose Server if:** you are comfortable working in the command line interface (AKA terminal/console). While this a bit more complex, the command line is used extensively with M2 and ROS2, so there's no avoiding it. Desktop features can be installed in Server if so desired.
+
+#### Install the Raspberry Pi Imager on the Host Computer
+Following the installation instructions found <a href="https://www.raspberrypi.com/documentation/computers/getting-started.html#step-1-install-and-launch-imager" target="_blank">here</a>.
+
+#### CM5 Lite Ubuntu Install on microSD Card
+It's recommended to follow the instructions in the official <a href="https://www.raspberrypi.com/documentation/computers/getting-started.html#install" target="_blank">Raspberry Pi Documentation</a>. In Step 2, do one of the following (not both!):
+
+1. Download the image Ubuntu 24.04 install image from the link above. Scroll down to "Use custom" in the Raspberry Pi Imager software. In the file dialog that pops up, select the image you downloaded.
+2. Scroll down to "Other general-purpose OS" in the Raspberry Pi Imager software. On the next screen, select Ubuntu, then Ubuntu Desktop 24.04.4 LTS (64-bit). The imager software will download the OS.
+
+The final step is to select the destination for the software to write the OS image, per the documentation.
+
+#### CM5 Ubuntu Install to eMMC or SSD drive
+This is a bit more involved and borderline hacky, but this is how it's done!
+
+1. Download the desired Ubuntu 24.04 image per links above (optionally, the image can be selected and downloaded in the Raspberry Pi Imager software during Step 8). 
+2. Install the USB Boot utility on your host computer per the instructions found <a href="https://www.raspberrypi.com/documentation/computers/compute-module.html#set-up-the-host-device" target="_blank">here</a>.
+3. Place the CM5 in USB Boot Mode. If using the OEM CM5 carrier board, this is accomplished by jumpering 2 pins on the carrier board:
+![](img/jumper.png)
+If using a 3rd party carrier board, consult the instructions for that board to place the CM5 in USB Boot Mode.
+4. Connect the USB-C connector on the carrier board to your host computer
+5. Make sure rpiboot that was installed in Step 2 is running. The CM5 should now be mounted.
+6. Launch the Raspberry Pi Imager software
+7. In the Imager software, select RASPBERRY PI 5 as the **Raspberry Pi Device**.
+8. Under **Operating System**, do one of the following (not both!):
+    1. Download the Ubuntu 24.04 install image from the link above. Scroll down to "Use custom". In the file dialog that pops up, select the image you downloaded.
+    2. Scroll down to "Other general-purpose OS". On the next screen, select Ubuntu, then Ubuntu Desktop (or Server) 24.04.4 LTS (64-bit). The imager software will download the OS. (NOTE: It's possible that a later version of Ubuntu 24.04 LTS will appear in the Imager options. This is okay, simply select the latest version that starts with 24.04)
+9. Under **Storage**, find the CM5 target where the OS is to be installed (either the eMMC or NVMe SSD). 
+    1. eMMC - There should be an option with wording similar to this: "mmcblk0 Raspberry Pi multi-function USB device". The important part is the "mmcblk0", where "mmc" is the eMMC. 
+    2. NVMe SSD - There should be an option with wording similar to this: "nvme0n1 Raspberry Pi multi-function USB device". The important part is the "nvme0n1", where "nvme" is the NVMe SSD. 
+10. Proceed to flash the OS to the selected target. **WARNING:** this step will erase the target. Make sure the target is either blank or contains nothing of value since it will be deleted.
+11. Remove the jumper installed in Step 3 and apply power to the carrier board. The CM5 should now boot into Ubuntu.
+
+
+## Why ROS2?
+<img src="../img/humble_t.png" alt="ROS2 Humble Image" width="200" style="float: right; margin-left: 10px;"/>
+The Robotic Operating System (ROS) is a collection of middleware, libraries and tools that were designed to benefit the robotics development community. The qualities of ROS that benefit the robotics community also benefit the data acquisition and control for marine energy community. It provides an easy entry point for software development for data acquisition control but it also is very scalable and has the capabilities to do very advanced computational tasks if needed for a project. For example, after installing ROS2 and MODAQ 2 packages, you can quickly run a process that collects and logs sensor data in mcap bag files for data analysis. However, if you need to build code that is deterministic or real-time, this is also possible with ROS but requires a much lower level understanding of computer programming and is likely not necessary for many applications. In summary, ROS is adaptable and extensible to meet the requirements of a data acquisition and control project.
+
+!!! note
+    Unless otherwise noted, wherever we say ROS, we mean ROS2. There are <a href="https://roboticsbackend.com/ros1-vs-ros2-practical-overview/" target="_blank">significant differences between ROS1 and ROS2</a> and they are not directly compatible. Use caution when searching for ROS online, a lot of links often go to ROS1 resources. 
 
 The fundamentals of ROS are covered extensively in many online trainings, videos, whitepapers and classes, and we have collected our recommended starting places in the [Useful Links](links.md#ubuntu) page.
 
@@ -51,7 +110,15 @@ For MODAQ 2 usage, the main concepts to understand are as follows:
 - Bag (mcap) files: data files that database the information collected and communicated through ROS
 
 
-### Requirements
+### Install ROS2
+<img src="../img/jazzy_t.png" alt="ROS2 Jazzy Image" width="200" style="float: right; margin-left: 10px;"/>
+It is recommended to follow the step-by-step process available from ros.org to properly install ROS2 on the linux controller target. 
+
+For x86_64, AMD64 targets using Ubuntu 22.04.x, install <a href="https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html" target="_blank">Humble Hawksbill</a>.
+
+For ARM64 targets using Ubuntu 24.04.x, install <a href="https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html" target="_blank">Jazzy Jalisco</a>.
+
+
 The hardware requirements should be met before continuing with setting up the software requirements.
 
 ```
