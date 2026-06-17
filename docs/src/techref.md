@@ -1,5 +1,5 @@
 # M2 Technical Reference ![MODAQ M2 Tech Ref](img/m2_icon.png#right)
-</p>
+This section contains details on some of the core M2 functions and nodes, as well as deeper discussions on some of the technical considerations.
 
 
 ## ROS2 Nodes
@@ -10,7 +10,15 @@ The M2 Reference Design includes the following nodes. Click on the item to expan
     <br>This node manages a number of MODAQ's core functionality, which include system logger, email alerts, and rate limiter (snoozer) <br><br> 
     <b>Package: </b>m2_supervisor<br>
     <b>Alias: </b>M2Supervisor<br>
-    <b>Configuration Parameters: </b>log file path, log file size limit, SMTP settings, distribution email lists (2x), analyzed topics, email snooze interval<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>log file path</li>
+    <li>log file size limit</li>
+    <li>SMTP settings</li> 
+    <li>distribution email lists (2x)</li>
+    <li>analyzed topics</li>
+    <li>email snooze interval</li>
+    </ul>
     <b>Publishers: </b>/system_messenger<br>
     <b>Subscriptions: </b>/system_messenger<br>
 </details>
@@ -19,7 +27,10 @@ The M2 Reference Design includes the following nodes. Click on the item to expan
     <br>Node description<br><br>
     <b>Package: </b>bag_recorder<br>
     <b>Alias: </b>N/A<br>
-    <b>Configuration Parameters: </b>IP address<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    </ul>
     <b>Publishers: </b>/system_messenger<br>
     <b>Subscriptions: </b>/system_messenger, /ain, /do, /din, /rtd, /bag_control<br>
 </details>
@@ -28,7 +39,12 @@ The M2 Reference Design includes the following nodes. Click on the item to expan
     <br>Reads up to 8 AI channels simultaneously from a single Labjack T8. This node uses a configurable timer to fetch (poll) channel reads from the T8.<br><br>
     <b>Package: </b>labjack_t8_ros2<br>
     <b>Alias: </b>LabjackAINSlow<br>
-    <b>Configuration Parameters: </b>IP address, sample rate, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>sample rate</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger, /ain_slow<br>
     <b>Subscriptions: </b>none<br>
 </details>
@@ -37,7 +53,13 @@ The M2 Reference Design includes the following nodes. Click on the item to expan
     <br>Streams up to 8 AI channels from a single Labjack T8. This node sets the T8 to stream data continuously at rates up to 40 kHz. Channel reads are simultaneous. To better manage network resources for high speed streams, data transfers are batched by the ScansPerRead parameter.<br><br>
     <b>Package: </b>labjack_t8_ros22<br>
     <b>Alias: </b>LabjackAINFast<br>
-    <b>Configuration Parameters: </b>IP address, sample rate, scans per read, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>sample rate</li>
+    <li>scans per read</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger, /ain_fast<br>
     <b>Subscriptions: </b>none<br>
 </details>
@@ -46,7 +68,12 @@ The M2 Reference Design includes the following nodes. Click on the item to expan
     <br>Controls one or more analog outputs on the T8. Output voltage can be adjusted between 0-10 VDC or ±10v with the LJTick-DAC<br><br>
     <b>Package: </b>labjack_t8_ros2<br>
     <b>Alias: </b>LabjackDAC<br>
-    <b>Configuration Parameters: </b>IP address, channel selection, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>channel selection</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger<br>
     <b>Subscriptions: </b>/LJ_Ctl_Pub<br>
 </details>
@@ -55,7 +82,11 @@ The M2 Reference Design includes the following nodes. Click on the item to expan
     <br>Switches one or more digital output (logic level) channels on the T8 high or low.<br><br>
     <b>Package: </b>labjack_t8_ros2<br>
     <b>Alias: </b>LabjackDO<br>
-    <b>Configuration Parameters: </b>IP address, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger<br>
     <b>Subscriptions: </b>/do<br>
 </details>
@@ -64,7 +95,11 @@ The M2 Reference Design includes the following nodes. Click on the item to expan
     <br>Reads the logic state of one or more DIO channels.<br><br>
     <b>Package: </b>labjack_t8_ros2<br>
     <b>Alias: </b>LabjackDIN<br>
-    <b>Configuration Parameters: </b>IP address, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger, /din<br>
     <b>Subscriptions: </b>none<br>
 </details>
@@ -91,7 +126,12 @@ The M2 Reference Design includes the following nodes. Click on the item to expan
     <br>Reads up to four channels of RTD temperature measurements from a Brainbox ED-582. This is adapted from a 3rd party API available <a href="https://www.brainboxes.com/faq/how-do-i-use-cpp-to-communicate-with-my-remote-io-module" target="_blank">here</a>.<br><br>
     <b>Package: </b>ed582<br>
     <b>Alias: </b>RTDed582<br>
-    <b>Configuration Parameters: </b>IP address, sample rate, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>sample rate</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger, /rtd<br>
     <b>Subscriptions: </b>none<br>
 </details>
@@ -100,7 +140,12 @@ The M2 Reference Design includes the following nodes. Click on the item to expan
     <br>This node can read directives published by the HMI and/or incorporate control logic and publish actions for digital or analog output channels.<br><br>
     <b>Package: </b>m2_control<br>
     <b>Alias: </b>M2Control<br>
-    <b>Configuration Parameters: </b>IP address, sample rate, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>sample rate</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger, /dac, /do<br>
     <b>Subscriptions: </b>/hmi_ctl<br>
 </details>
@@ -148,7 +193,7 @@ At the time of writing, it appears that the mainline Linux kernel is expected to
 
 ### Validating RT Performance
 
-Once patched kernel has been installed and the necessary changes to BIOS have been made, it's necessary to conduct some tests on the system to validate the 'as-built' latency performance. 
+Once a patched kernel has been installed and the necessary changes to BIOS have been made, it's necessary to conduct some tests on the system to validate the 'as-built' latency performance. 
 
 A very useful tool for this is provided by intel: <a href="https://eci.intel.com/docs/3.3/development/performance/benchmarks.html#about-rtpm" target="_blank">RTPM</a>. This tool will evaluate the settings on your computer to ensure they are optimized for real-time performance. It also will conduct several tests that will characterize your real-time performance.
 
@@ -173,13 +218,23 @@ Coming soon...
 
 
 ## 4-20 mA Current Loops
-Coming soon...
+One or more of the 8 analog inputs available on the RD could be allocated for measuring outputs from devices that signal using a current loop. The 4-20 mA current loop would be converted to 1-5 volts using a 250 Ω (or 2-10 VDC using a 500 Ω) precision shunt resistor connected across the positive and negative input terminals of the voltage channel. 
+
+Alternatively, M2 supports using current loop interface modules with digital outputs (<a href="https://store.ncd.io/product/4-channel-4-20-ma-current-loop-receiver-16-bit-ads1115-i2c-mini-module/" target="_blank">example 1</a>, <a href="https://store.ncd.io/product/4-channel-i2c-4-20ma-current-receiver-with-i2c-interface/" target="_blank">example 2</a>), which is not included in the RD specification, but available upon request.
+
+![](img/passive_cl.png)<br>
+![](img/active_cl.png)
+It's important to note that there are 2 types of current loops: passive and active. Passive devices (such as some pressure transducers) require an external source driving the current loop, while active devices provide the driving source internally. The M2 RD supports active loops through the shunt resistor method mentioned in the first paragraph. Passive circuits can be made active with the addition of a power supply. The example 1 link for the optional current loop interface works with passive devices.
 
 ## Heading
 
 Getting a reliable estimate of heading on a fixed or semi-stationary device can be tricky. Devices that rely on Earth's magnetic field need to be calibrated in-situ and have the proper magnetic declination correction applied. 
 
 Since a calibration procedure generally requires rotating the sensor 360° in one or more axis, this is often difficult or near impossible once the sensor is mounted on the device (WEC, buoy, etc). It's easier to calibrate the compass prior to installation, however this is not effective, since the magnetic field will most likely be distorted by the presence of hard and soft iron sources near the mounting location. 
+
+This leads to our decision to include the Advanced Navigation GNSS Compass in the M2 RD design specification. It avoids the issues associated with magnetic compasses by using dual GPS antennas to achieve 0.2° heading performance. Because of the antennas, it needs a clear view of the sky- which might not be possible in some use-cases. Therefore, the magnetic heading from the Xsens INS can be used instead. 
+
+If very precise heading estimates are required in your application and GPS is not an option, we suggest looking at some gyrocompass options, such as the ring laser or fiber optic gyros. 
 
 [^1]: https://www.linux.com/news/in-the-trenches-with-thomas-gleixner-real-time-linux-kernel-patch-set/
 [^2]: https://ntrs.nasa.gov/api/citations/20200002390/downloads/20200002390.pdf
