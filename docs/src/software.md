@@ -15,7 +15,7 @@ The main software aspects of MODAQ 2 are as follows:
 - Third Party DAQ Driver libraries
 
 ## Ubuntu Operating System
-Ubuntu is a free to use[^1] Linux distribution and has the best support for the ROS ecosystem. To get started working in Ubuntu, it is recommended to visit the [Hardware page](hardware.md) of this document to ensure that your controller meets the requirements of the MODAQ 2 design. After that, you can follow the instructions provided below to install the correct version of Ubuntu Desktop on your controller. At the present time, select Ubuntu 22.04 Desktop for x86_64 (Intel and AMD64) controllers and Ubuntu 24.04 for Arm64. 
+Ubuntu is a free to use[^1] Linux distribution that has <a href="https://www.ros.org/reps/rep-2000.html" target="_blank">Tier 1 support</a>[^2] by the ROS ecosystem. To get started working in Ubuntu, it is recommended to visit the [Hardware page](hardware.md) of this document to ensure that your controller meets the requirements of the MODAQ 2 design. After that, you can follow the instructions provided below to install the correct version of Ubuntu Desktop on your controller. At the present time, select Ubuntu 22.04 Desktop for x86_64 (Intel and AMD64) controllers and Ubuntu 24.04 for Arm64. 
 
 !!! note
     Ubuntu 24.04 <a href="https://forums.raspberrypi.com/viewtopic.php?t=359566#p2157713" target="_blank">officially supports</a> the Raspberry Pi CM5 hardware. Since ROS2 releases tend to be tied to specific Ubuntu versions, Arm64 applications will need to use ROS2 Jazzy instead of Humble. 
@@ -45,7 +45,7 @@ The easiest way to install Ubuntu on a x86_64 controller is to <a href="https://
 
 5. Follow onscreen instructions to install the OS to the desired location on the controller. 
 
-### Installing Ubuntu 24.04 on Raspberry Pi CM5 (Arm64)[^2]
+### Installing Ubuntu 24.04 on Raspberry Pi CM5 (Arm64)[^3]
 There are a couple methods of installing an OS to a CM5, which to chose will depend on the version of the CM5 you have and where you want the OS to be installed. We chose CM5s with onboard eMMC storage and installed the OS there. We could have opted to install the OS to the NVMe SSD drive, however we prefer to use the SSD for data only. If the OS and data reside on the same drive, it's more involved to swap the drive (for instance, it might be desirable to quickly replace a full drive with an empty one in the field), since the OS will need to be cloned to the new drive. Lite variants of the CM5 (those without eMMC) could have the OS installed to a microSD card.
 
 Download the Ubuntu 24.04 Desktop install image <a href="https://cdimage.ubuntu.com/releases/noble/release/ubuntu-24.04.4-preinstalled-desktop-arm64+raspi.img.xz">here</a> or Server image <a href="https://cdimage.ubuntu.com/releases/noble/release/ubuntu-24.04.4-preinstalled-server-arm64+raspi.img.xz">here</a>.
@@ -62,16 +62,16 @@ Download the Ubuntu 24.04 Desktop install image <a href="https://cdimage.ubuntu.
 #### Install the Raspberry Pi Imager on the Host Computer
 Following the installation instructions found <a href="https://www.raspberrypi.com/documentation/computers/getting-started.html#step-1-install-and-launch-imager" target="_blank">here</a>.
 
-#### CM5 Lite Ubuntu Install on microSD Card
+#### Install Ubuntu on microSD Card (CM5 Lite only)
 It's recommended to follow the instructions in the official <a href="https://www.raspberrypi.com/documentation/computers/getting-started.html#install" target="_blank">Raspberry Pi Documentation</a>. In Step 2, do one of the following (not both!):
 
-1. Download the image Ubuntu 24.04 install image from the link above. Scroll down to "Use custom" in the Raspberry Pi Imager software. In the file dialog that pops up, select the image you downloaded.
+1. Download the Ubuntu 24.04 install image from the link above. Scroll down to "Use custom" in the Raspberry Pi Imager software. In the file dialog that pops up, select the image you downloaded.
 2. Scroll down to "Other general-purpose OS" in the Raspberry Pi Imager software. On the next screen, select Ubuntu, then Ubuntu Desktop 24.04.4 LTS (64-bit). The imager software will download the OS.
 
 The final step is to select the destination for the software to write the OS image, per the documentation.
 
-#### CM5 Ubuntu Install to eMMC or SSD drive
-This is a bit more involved and borderline hacky, but this is how it's done! NOTE: this method can be used with a CM5 Lite for installing the OS to an NVMe/SSD instead of microSD. 
+#### Install Ubuntu to eMMC or SSD drive
+This is a bit more involved and borderline hacky, but this is how it's done! NOTE: this method can be used with a CM5 Lite for installing the OS to an NVMe/SSD instead of microSD (Lite models do not have eMMC). 
 
 1. Download the desired Ubuntu 24.04 image per links above (optionally, the image can be selected and downloaded in the Raspberry Pi Imager software during Step 8). 
 2. Install the USB Boot utility on your host computer per the instructions found <a href="https://www.raspberrypi.com/documentation/computers/compute-module.html#set-up-the-host-device" target="_blank">here</a>.
@@ -94,7 +94,7 @@ If using a 3rd party carrier board, consult the instructions for that board to p
 
 ## Why ROS2?
 <img src="../img/humble_t.png" alt="ROS2 Humble Image" width="200" style="float: right; margin-left: 10px;"/>
-The Robotic Operating System (ROS) is a collection of libraries, tools, and middleware that were designed to benefit the robotics development community. The qualities of ROS that benefit the robotics community also benefit the data acquisition and control for marine energy community. It includes native functionality, such as concurrent processes, interprocess communications, saving data, and runtime parameter loading, which reduces development load. It provides an easy entry point for software development for data acquisition control but it also is very scalable and has the capabilities to do very advanced computational tasks if needed for a project. For example, after installing ROS2 and MODAQ 2 packages, you can quickly run a process that collects and logs sensor data in mcap bag files[^3] for data analysis. However, if you need to build code that is deterministic or [real-time](techref.md#real-time), this is also possible with ROS but requires a much lower level understanding of computer programming and is likely not necessary for many applications. In summary, ROS is adaptable and extensible to meet the requirements of a data acquisition and control project.
+The Robotic Operating System (ROS) is a collection of libraries, tools, and middleware that were designed to benefit the robotics development community. The qualities of ROS that benefit the robotics community also benefit the data acquisition and control for marine energy community. It includes native functionality, such as concurrent processes, interprocess communications, saving data, and runtime parameter loading, which reduces development load. It provides an easy entry point for software development for data acquisition control but it also is very scalable and has the capabilities to do very advanced computational tasks if needed for a project. For example, after installing ROS2 and MODAQ 2 packages, you can quickly run a process that collects and logs sensor data in mcap bag files[^4] for data analysis. However, if you need to build code that is deterministic or [real-time](techref.md#real-time), this is also possible with ROS but requires a much lower level understanding of computer programming and is likely not necessary for many applications. In summary, ROS is adaptable and extensible to meet the requirements of a data acquisition and control project.
 
 !!! note
     Unless otherwise noted, wherever we say ROS, we mean ROS2. There are <a href="https://roboticsbackend.com/ros1-vs-ros2-practical-overview/" target="_blank">significant differences between ROS1 and ROS2</a> and they are not directly compatible. Use caution when searching for ROS online, a lot of links often go to ROS1 resources. 
@@ -220,78 +220,6 @@ BagRecorder:
       - /T8din
 ```
 
-#### Parsing mcap files
-The mcap file format was designed by Foxglove  and they also developed a GUI software that is able to process these data files and output plots, tables and other useful visualizers. For information on this GUI viewer, please see [Useful Links](links.md#ubuntu).
-
-To analyze the data, we recommend using the rosbags python package which is also able to parse the mcap files and generate numpy arrays which can be used for data analysis. This can be installed with pip: `pip install rosbags`
-
-Example Python code for parsing mcap files:
-```py
-from rosbags.rosbag2 import Reader
-from rosbags.serde import deserialize_cdr
-import numpy as np
-from matplotlib import pyplot as plt
-from pathlib import Path
-from rosbags.typesys import Stores, get_types_from_msg, get_typestore
-
-import os
-
-def get_all_file_names(folder_path):
-    try:
-        # List all files in the given folder
-        file_names = os.listdir(folder_path)
-        # Filter out directories, only keep files and return their full paths
-        file_paths = [os.path.join(folder_path, file) for file in file_names if os.path.isfile(os.path.join(folder_path, file))]
-        
-        # Generate the modaq_messages/msg/{FILE_NAME} strings
-        modaq_messages = [f"modaq_messages/msg/{os.path.splitext(file)[0]}" for file in file_names if os.path.isfile(os.path.join(folder_path, file))]        
-        return file_paths, modaq_messages
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return [], []
-
-
-# Example usage
-folder_path = r"C:\MODAQ\MODAQ2-RD-Dev\src\modaq_messages\msg"
-file_names, message_types = get_all_file_names(folder_path)
-print(file_names, message_types)
-typestore = get_typestore(Stores.ROS2_HUMBLE)
-add_types = {}
-
-for i, name in enumerate(file_names):
-    print("name: ", name)
-    msgpath = Path(name)
-    msgdef = msgpath.read_text(encoding='utf-8')
-    print(msgdef)
-    add_types.update(get_types_from_msg(msgdef, message_types[i]))
-
-typestore.register(add_types)
-# create reader instance and open for reading
-last_time = 0
-last_timer = 0
-dt_ros = []
-dt = []
-
-with Reader(r"./") as reader:
-    # Topic and msgtype information is available on .connections list.
-    for connection in reader.connections:
-        print(connection.topic, connection.msgtype)
-
-    # Iterate over messages.
-
-    for connection, timestamp, rawdata in reader.messages():
-        if connection.topic == '/ain_flap':
-            msg = typestore.deserialize_cdr(rawdata, connection.msgtype)
-            time = (msg.header.stamp.sec + (msg.header.stamp.nanosec/1e9))
-            
-            dt_ros.append(time-last_time)
-            last_time = time
-            
-
-            
-plt.plot(np.array(dt_ros)[100::])
-plt.show()
-```
 
 ### MODAQ Messages
 modaq_messages is a custom message specifier that is used in MODAQ 2. ROS includes many message types by default but it was deemed necessary to build our own custom message types more applicable to our application of data acquisition. This ROS package has no nodes in it but it includes the CMake commands to turn the msg files into headers which can be referenced in different nodes. For example, `/system_messenger` uses `modaq_messages/msg/systemmsg.hpp` to define the type in different nodes. To use these custom messages, they must be included in the package.xml and the CMakeLists.txt file.
@@ -360,12 +288,12 @@ The precision time protocol or IEEE1588v2 or PTPv2 is a protocol used for synchr
 ```
 Both of these Intel ethernet NICs (I210 and I225) support PTP. We recommend purchasing controllers with Intel NICs as they have the highest reliability when using PTP.
 
-The linux support for PTP can be installed using `sudo apt install linuxptp`. This enables the ptp4l tool which allows user interaction with the PTP hardware clocks on your controller's NIC.
-
 </p>
 
 [^1]: Always read the licensing terms and conditions, but for most use-cases there's no fee. The publishers of Ubuntu do offer <a href="https://canonical.com/knowledge/security-and-compliance/what-is-ubuntu-pro" target="_blank">Ubuntu Pro</a> as a subscription that offers technical support among other features.
 
-[^2]: Other Arm64 platforms may work with M2, but we have only tested the CM5. Essentially if Ubuntu and ROS2 install and run without error (or syslog entries indicating problems with core systems), M2 should be fine.
+[^2]: According to ros.org: "Tier 1 platforms are subjected to our unit test suite and other testing tools on a frequent basis including continuous integration jobs, nightly jobs, packaging jobs, and performance testing. Errors or bugs discovered in these platforms are prioritized for correction by the development team. Significant errors discovered in Tier 1 platforms can impact release dates and we strive to resolve all known high priority errors in Tier 1 platforms prior to new version releases."
 
-[^3]: A Bag File is the ROS-standard data storage container. It allows a convenient way to log measurement and other M2 system messages <a href="https://foxglove.dev/blog/mcap-as-the-ros2-default-bag-format" target="_blank">MCAP</a> is an open-source storage format for bag files that is faster and has better data integrity than the former storage format (SQLite).
+[^3]: Other Arm64 platforms may work with M2, but we have only tested the CM5. Essentially if Ubuntu and ROS2 install and run without error (or syslog entries indicating problems with core systems), M2 should be fine.
+
+[^4]: A Bag File is the ROS-standard data storage container. It allows a convenient way to log measurement and other M2 system messages <a href="https://foxglove.dev/blog/mcap-as-the-ros2-default-bag-format" target="_blank">MCAP</a> is an open-source storage format for bag files that is faster and has better data integrity than the former storage format (SQLite).

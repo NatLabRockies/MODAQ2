@@ -12,9 +12,7 @@
   </div>
 </div>
 <p />
-MODAQ2 has been developed to operate on controllers that are based on either Intel/x86_64 or ARM64 CPU 
-architectures. Initially we assumed there would be enough differences in these architectures to require 
-developing and maintaining a codebase for each. However, the differences were few and easily addressed 
+The MODAQ 2 codebase has been developed to operate on controllers with either Intel/x86_64 or ARM64 CPU architectures. Initially we assumed there would be enough differences in these architectures to require developing and maintaining a codebase for each. However, the differences were few and easily addressed 
 in the code. To keep things simple, there is a single unified version of the M2 software that supports 
 both Intel and Arm architectures. 
 

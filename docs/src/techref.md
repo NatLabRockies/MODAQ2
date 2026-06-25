@@ -210,11 +210,96 @@ In our experience, PTP implementation either works magically or is a real bear. 
 3. PTP services configured and running on the endpoints
 4. PTP-capable network switch
 
-These items need to be properly configured, otherwise the PTP performance may be degraded or non-existent. 
+These items need to be properly configured, otherwise the PTP performance may be degraded or non-existent. For instance, we've found that some cheap consumer unmanaged switches (such as the <a href="https://www.netgear.com/business/wired/switches/unmanaged/gs305/" target="_blank">Netgear GS305</a>) will pass PTP packets, however the observed PTP performance degrades to microsecond accuracy with large standard deviations. This is still pretty good and better than NTP, but not ideal and possibly not reliable. 
 
+The linux support for PTP can be installed using `sudo apt install linuxptp`. This enables the ptp4l tool which allows user interaction with the PTP hardware clocks on your controller's NIC.
+
+## Parsing MCAP Files
+The mcap file format was designed by Foxglove  and they also developed a GUI software that is able to process these data files and output plots, tables and other useful visualizers. For information on this GUI viewer, please see [Useful Links](links.md#ubuntu).
+
+To analyze the data, we recommend using the rosbags python package which is also able to parse the mcap files and generate numpy arrays which can be used for data analysis. This can be installed with pip: `pip install rosbags`
+
+Example Python code for parsing mcap files:
+```py
+from rosbags.rosbag2 import Reader
+from rosbags.serde import deserialize_cdr
+import numpy as np
+from matplotlib import pyplot as plt
+from pathlib import Path
+from rosbags.typesys import Stores, get_types_from_msg, get_typestore
+
+import os
+
+def get_all_file_names(folder_path):
+    try:
+        # List all files in the given folder
+        file_names = os.listdir(folder_path)
+        # Filter out directories, only keep files and return their full paths
+        file_paths = [os.path.join(folder_path, file) for file in file_names if os.path.isfile(os.path.join(folder_path, file))]
+        
+        # Generate the modaq_messages/msg/{FILE_NAME} strings
+        modaq_messages = [f"modaq_messages/msg/{os.path.splitext(file)[0]}" for file in file_names if os.path.isfile(os.path.join(folder_path, file))]        
+        return file_paths, modaq_messages
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return [], []
+
+
+# Example usage
+folder_path = r"C:\MODAQ\MODAQ2-RD-Dev\src\modaq_messages\msg"
+file_names, message_types = get_all_file_names(folder_path)
+print(file_names, message_types)
+typestore = get_typestore(Stores.ROS2_HUMBLE)
+add_types = {}
+
+for i, name in enumerate(file_names):
+    print("name: ", name)
+    msgpath = Path(name)
+    msgdef = msgpath.read_text(encoding='utf-8')
+    print(msgdef)
+    add_types.update(get_types_from_msg(msgdef, message_types[i]))
+
+typestore.register(add_types)
+# create reader instance and open for reading
+last_time = 0
+last_timer = 0
+dt_ros = []
+dt = []
+
+with Reader(r"./") as reader:
+    # Topic and msgtype information is available on .connections list.
+    for connection in reader.connections:
+        print(connection.topic, connection.msgtype)
+
+    # Iterate over messages.
+
+    for connection, timestamp, rawdata in reader.messages():
+        if connection.topic == '/ain_flap':
+            msg = typestore.deserialize_cdr(rawdata, connection.msgtype)
+            time = (msg.header.stamp.sec + (msg.header.stamp.nanosec/1e9))
+            
+            dt_ros.append(time-last_time)
+            last_time = time
+            
+
+            
+plt.plot(np.array(dt_ros)[100::])
+plt.show()
+```
 
 ## ADCs
-Coming soon...
+While there's an abundance of really good analog to digital converters (ADCs) on the market, one of our biggest challenges was finding one suitable for our requirements. 
+
+- 24 bit
+- Simultaneous sampling
+- At least 4 channels
+- Channel-to-channel isolation
+- Anti-aliasing filter
+- Not dependent on a particular vendor's controller (i.e. non-proprietary)
+- Ready to go, with simple ethernet or USB interfacing
+- Works with linux
+
+
 
 
 ## 4-20 mA Current Loops
@@ -223,7 +308,7 @@ One or more of the 8 analog inputs available on the RD could be allocated for me
 Alternatively, M2 supports using current loop interface modules with digital outputs (<a href="https://store.ncd.io/product/4-channel-4-20-ma-current-loop-receiver-16-bit-ads1115-i2c-mini-module/" target="_blank">example 1</a>, <a href="https://store.ncd.io/product/4-channel-i2c-4-20ma-current-receiver-with-i2c-interface/" target="_blank">example 2</a>), which is not included in the RD specification, but available upon request.
 
 ![](img/passive_cl.png)<br>
-![](img/active_cl.png)
+![](img/active_cl.png)<br>
 It's important to note that there are 2 types of current loops: passive and active. Passive devices (such as some pressure transducers) require an external source driving the current loop, while active devices provide the driving source internally. The M2 RD supports active loops through the shunt resistor method mentioned in the first paragraph. Passive circuits can be made active with the addition of a power supply. The example 1 link for the optional current loop interface works with passive devices.
 
 ## Heading

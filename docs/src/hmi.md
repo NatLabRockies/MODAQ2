@@ -31,10 +31,10 @@ Frontend:
 
 !!! note
 
-    The code uses offline versions of each of these libraries, which allows the HMI to operate without needing to have an active internet connection for dynamically loading the libraries from a Content Delivery Network (CDN). Because of this, the libraries are frozen in time and may not have the latest and greatest features and will lack security updates and bugfixes. At this point, the libraries appear to be sufficiently stable and since the HMI is served on a private subnet, security should not be an issue. It should be cautioned to only use the versions of those libraries that the code was originally written for, since different versions can break stuff.
-    
-    Further, getting offline versions of JS libraries is becoming more difficult. It used to be a given that a library would have a simple and clear link to the offline version, but that is slowly changing. Since most web servers are by nature 'online', it makes sense to pull the libraries as needed from a CDN which should assure the libraries are up to date, with all recent bugfixes and security patches. This is also smart from a marketing/tracking perspective, since the developer can have a better feel for the userbase and popularity of their scripts. However, CDNs can go down, scripts can be moved to different CDNs, developers can pull/change features or alter the licensing terms, or there can be network issues causing the script not to load, so for mission critical stuff and particularly if this server does not have continuous internet access, an offline version is necessary
+    The code uses offline bundled versions of each of these libraries, which allows the HMI to operate without needing to have an active internet connection for dynamically loading the libraries from a Content Delivery Network (CDN). Because of this, the libraries are frozen in time and may not have the latest and greatest features and will lack security updates and bugfixes. At this point, the libraries appear to be sufficiently stable and since the HMI is served on a private subnet, security should not be an issue. It should be cautioned to only use the versions of those libraries that the code was originally written for, since different versions can break stuff.
 
+    This is admittedly a regression from modern web-stack architecture practices, however we're purposely placing the processing burden on the browser and not the server, since the server in this case is also our DAQ controller. We're prioritizing the M2 data acquisition and control tasks by keeping HMI serving impacts low.
+    
 
 ### nginx Configuration
 
@@ -284,7 +284,7 @@ chart.data.datasets.forEach(dataset => {
 
 
 
-[^1]: Using the minified version of any of the required JS libraries is totally optional. We prefer minified, since it's a smaller overall payload and can improve performance. The disadvantage to using minified libraries is that all unnecessary whitespace characters are removed, so inspecting or edited the library code can be very difficult- even though it's still in plain text.  
+[^1]: Using the minified version of any of the required JS libraries is totally optional. We prefer minified, since it's a smaller overall payload and can improve performance. The disadvantage to using minified libraries is that all unnecessary whitespace characters are removed, as are comments, and some optimizations may be applied (i.e. variable name shortening), so inspecting or editing the library code can be very difficult- even though it's still in plain text.  
 [^2]: We're using chartjs v3.3.2 since at the time we were creating the HMI there were compatibility issues with the plugin-streaming library on v4 and higher. That may have been resolved in later releases of plugin-streaming. 
 [^3]: Since finding the dependencies as minified libraries in the correct version can be a bit of a pain, here are direct links: <a href="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js" target="_blank">luxon v3.4.40<a/> and <a href="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.0.0" target="_blank">chartjs-adapter-luxon v1.0.0</a>
 [^4]: Replace 'localhost' with the IP address of the M2 controller hosting the HMI webpage. 

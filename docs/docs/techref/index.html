@@ -946,7 +946,7 @@
 
 
 <h1 id="m2-technical-reference">M2 Technical Reference <img alt="MODAQ M2 Tech Ref" src="../img/m2_icon.png#right" /><a class="headerlink" href="#m2-technical-reference" title="Permanent link">&para;</a></h1>
-</p>
+<p>This section contains details on some of the core M2 functions and nodes, as well as deeper discussions on some of the technical considerations.</p>
 <h2 id="ros2-nodes">ROS2 Nodes<a class="headerlink" href="#ros2-nodes" title="Permanent link">&para;</a></h2>
 <p>The M2 Reference Design includes the following nodes. Click on the item to expand its description.</p>
 <details>
@@ -954,7 +954,15 @@
     <br>This node manages a number of MODAQ's core functionality, which include system logger, email alerts, and rate limiter (snoozer) <br><br> 
     <b>Package: </b>m2_supervisor<br>
     <b>Alias: </b>M2Supervisor<br>
-    <b>Configuration Parameters: </b>log file path, log file size limit, SMTP settings, distribution email lists (2x), analyzed topics, email snooze interval<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>log file path</li>
+    <li>log file size limit</li>
+    <li>SMTP settings</li> 
+    <li>distribution email lists (2x)</li>
+    <li>analyzed topics</li>
+    <li>email snooze interval</li>
+    </ul>
     <b>Publishers: </b>/system_messenger<br>
     <b>Subscriptions: </b>/system_messenger<br>
 </details>
@@ -963,7 +971,10 @@
     <br>Node description<br><br>
     <b>Package: </b>bag_recorder<br>
     <b>Alias: </b>N/A<br>
-    <b>Configuration Parameters: </b>IP address<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    </ul>
     <b>Publishers: </b>/system_messenger<br>
     <b>Subscriptions: </b>/system_messenger, /ain, /do, /din, /rtd, /bag_control<br>
 </details>
@@ -972,7 +983,12 @@
     <br>Reads up to 8 AI channels simultaneously from a single Labjack T8. This node uses a configurable timer to fetch (poll) channel reads from the T8.<br><br>
     <b>Package: </b>labjack_t8_ros2<br>
     <b>Alias: </b>LabjackAINSlow<br>
-    <b>Configuration Parameters: </b>IP address, sample rate, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>sample rate</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger, /ain_slow<br>
     <b>Subscriptions: </b>none<br>
 </details>
@@ -981,7 +997,13 @@
     <br>Streams up to 8 AI channels from a single Labjack T8. This node sets the T8 to stream data continuously at rates up to 40 kHz. Channel reads are simultaneous. To better manage network resources for high speed streams, data transfers are batched by the ScansPerRead parameter.<br><br>
     <b>Package: </b>labjack_t8_ros22<br>
     <b>Alias: </b>LabjackAINFast<br>
-    <b>Configuration Parameters: </b>IP address, sample rate, scans per read, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>sample rate</li>
+    <li>scans per read</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger, /ain_fast<br>
     <b>Subscriptions: </b>none<br>
 </details>
@@ -990,7 +1012,12 @@
     <br>Controls one or more analog outputs on the T8. Output voltage can be adjusted between 0-10 VDC or ±10v with the LJTick-DAC<br><br>
     <b>Package: </b>labjack_t8_ros2<br>
     <b>Alias: </b>LabjackDAC<br>
-    <b>Configuration Parameters: </b>IP address, channel selection, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>channel selection</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger<br>
     <b>Subscriptions: </b>/LJ_Ctl_Pub<br>
 </details>
@@ -999,7 +1026,11 @@
     <br>Switches one or more digital output (logic level) channels on the T8 high or low.<br><br>
     <b>Package: </b>labjack_t8_ros2<br>
     <b>Alias: </b>LabjackDO<br>
-    <b>Configuration Parameters: </b>IP address, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger<br>
     <b>Subscriptions: </b>/do<br>
 </details>
@@ -1008,7 +1039,11 @@
     <br>Reads the logic state of one or more DIO channels.<br><br>
     <b>Package: </b>labjack_t8_ros2<br>
     <b>Alias: </b>LabjackDIN<br>
-    <b>Configuration Parameters: </b>IP address, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger, /din<br>
     <b>Subscriptions: </b>none<br>
 </details>
@@ -1035,7 +1070,12 @@
     <br>Reads up to four channels of RTD temperature measurements from a Brainbox ED-582. This is adapted from a 3rd party API available <a href="https://www.brainboxes.com/faq/how-do-i-use-cpp-to-communicate-with-my-remote-io-module" target="_blank">here</a>.<br><br>
     <b>Package: </b>ed582<br>
     <b>Alias: </b>RTDed582<br>
-    <b>Configuration Parameters: </b>IP address, sample rate, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>sample rate</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger, /rtd<br>
     <b>Subscriptions: </b>none<br>
 </details>
@@ -1044,7 +1084,12 @@
     <br>This node can read directives published by the HMI and/or incorporate control logic and publish actions for digital or analog output channels.<br><br>
     <b>Package: </b>m2_control<br>
     <b>Alias: </b>M2Control<br>
-    <b>Configuration Parameters: </b>IP address, sample rate, topic name<br>
+    <b>Configuration Parameters: </b>
+    <ul>
+    <li>IP address</li>
+    <li>sample rate</li>
+    <li>topic name</li>
+    </ul>
     <b>Publishers: </b>/system_messenger, /dac, /do<br>
     <b>Subscriptions: </b>/hmi_ctl<br>
 </details>
@@ -1080,7 +1125,7 @@ A deterministic real-time system should complete a task within a bound time peri
 <p>Linux with the PREEMPT_RT patch has been successfully used in various industries such as automotive, space, and industrial automation for years and by organizations including National Instruments, NASA, and SpaceX.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup><sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> This lends confidence that it's appropriate for M2 applications.</p>
 <p>At the time of writing, it appears that the mainline Linux kernel is expected to gain real-time support<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup> in a coming release. Until that happens, it's necessary to <a href="https://docs.ros.org/en/humble/Tutorials/Miscellaneous/Building-Realtime-rt_preempt-kernel-for-ROS-2.html" target="_blank">manually compile the kernel with the PREEMPT_RT patch</a> or find a distribution for an already patched RT kernel.   </p>
 <h3 id="validating-rt-performance">Validating RT Performance<a class="headerlink" href="#validating-rt-performance" title="Permanent link">&para;</a></h3>
-<p>Once patched kernel has been installed and the necessary changes to BIOS have been made, it's necessary to conduct some tests on the system to validate the 'as-built' latency performance. </p>
+<p>Once a patched kernel has been installed and the necessary changes to BIOS have been made, it's necessary to conduct some tests on the system to validate the 'as-built' latency performance. </p>
 <p>A very useful tool for this is provided by intel: <a href="https://eci.intel.com/docs/3.3/development/performance/benchmarks.html#about-rtpm" target="_blank">RTPM</a>. This tool will evaluate the settings on your computer to ensure they are optimized for real-time performance. It also will conduct several tests that will characterize your real-time performance.</p>
 <h2 id="precision-time-protocol">Precision Time Protocol<a class="headerlink" href="#precision-time-protocol" title="Permanent link">&para;</a></h2>
 <p>The promise of PTP is that all connected PTP-aware devices will be synchronized and reference-time accurate to 100's, if not 10's of nanoseconds- without drift. By comparison, <a href="https://en.wikipedia.org/wiki/Network_Time_Protocol" target="_blank">Network Time Protocol</a> (NTP), which is what most consumer computers and laptops use as a time reference, can at best achieve 10's of milliseconds accuracy. While NTP accuracy might be perfectly acceptable to some and often better than a real time clock (which can drift <a href="https://www.best-microcontroller-projects.com/ppm.html" target="-blank">several seconds a day</a>), it's a ~6 order of magnitude difference in accuracy as compared to PTP. If a quality time reference is not available, samples taken from input modules on the same DAQ controller will be disciplined by the same clock and will likely be <i>precisely</i> timestamped relative each other, but may not be <i>accurate</i> to actual time (i.e. UTC) . </p>
@@ -1096,10 +1141,16 @@ A deterministic real-time system should complete a task within a bound time peri
 <h2 id="adcs">ADCs<a class="headerlink" href="#adcs" title="Permanent link">&para;</a></h2>
 <p>Coming soon...</p>
 <h2 id="4-20-ma-current-loops">4-20 mA Current Loops<a class="headerlink" href="#4-20-ma-current-loops" title="Permanent link">&para;</a></h2>
-<p>Coming soon...</p>
+<p>One or more of the 8 analog inputs available on the RD could be allocated for measuring outputs from devices that signal using a current loop. The 4-20 mA current loop would be converted to 1-5 volts using a 250 Ω (or 2-10 VDC using a 500 Ω) precision shunt resistor connected across the positive and negative input terminals of the voltage channel. </p>
+<p>Alternatively, M2 supports using current loop interface modules with digital outputs (<a href="https://store.ncd.io/product/4-channel-4-20-ma-current-loop-receiver-16-bit-ads1115-i2c-mini-module/" target="_blank">example 1</a>, <a href="https://store.ncd.io/product/4-channel-i2c-4-20ma-current-receiver-with-i2c-interface/" target="_blank">example 2</a>), which is not included in the RD specification, but available upon request.</p>
+<p><img alt="" src="../img/passive_cl.png" /><br>
+<img alt="" src="../img/active_cl.png" />
+It's important to note that there are 2 types of current loops: passive and active. Passive devices (such as some pressure transducers) require an external source driving the current loop, while active devices provide the driving source internally. The M2 RD supports active loops through the shunt resistor method mentioned in the first paragraph. Passive circuits can be made active with the addition of a power supply. The example 1 link for the optional current loop interface works with passive devices.</p>
 <h2 id="heading">Heading<a class="headerlink" href="#heading" title="Permanent link">&para;</a></h2>
 <p>Getting a reliable estimate of heading on a fixed or semi-stationary device can be tricky. Devices that rely on Earth's magnetic field need to be calibrated in-situ and have the proper magnetic declination correction applied. </p>
 <p>Since a calibration procedure generally requires rotating the sensor 360° in one or more axis, this is often difficult or near impossible once the sensor is mounted on the device (WEC, buoy, etc). It's easier to calibrate the compass prior to installation, however this is not effective, since the magnetic field will most likely be distorted by the presence of hard and soft iron sources near the mounting location. </p>
+<p>This leads to our decision to include the Advanced Navigation GNSS Compass in the M2 RD design specification. It avoids the issues associated with magnetic compasses by using dual GPS antennas to achieve 0.2° heading performance. Because of the antennas, it needs a clear view of the sky- which might not be possible in some use-cases. Therefore, the magnetic heading from the Xsens INS can be used instead. </p>
+<p>If very precise heading estimates are required in your application and GPS is not an option, we suggest looking at some gyrocompass options, such as the ring laser or fiber optic gyros. </p>
 <div class="footnote">
 <hr />
 <ol>

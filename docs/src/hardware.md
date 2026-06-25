@@ -60,17 +60,17 @@ Some considerations for CPU selection include:
 
 The controller main board will include a preinstalled CPU. Some main boards may offer a CPU selection, however most do not. When selecting a main board, it's necessary to balance onboard features and specifications against the CPU capabilities. 
 
-Depending on the application, the main board might be sold as a Single Board Computer (SBC) or be prepackaged in an enclosure or case (e.g. industrial PC). It's recommended to avoid general-purpose consumer oriented boards and instead look for boards targeted for industrial or embedded applications. Some devices marketed for 'Edge' computing may also be suitable. Desireable features in a main board might include:
+Depending on the application, the main board might be sold as a Single Board Computer (SBC) or be prepackaged in an enclosure or case (e.g. industrial PC). It's recommended to avoid general-purpose consumer oriented boards and instead look for boards targeted for industrial or embedded applications. Some devices marketed for 'Edge' computing may also be suitable. Desirable features in a main board might include:
 
 - Minimum of 4 GB RAM
 - M.2 slots that support NVMe (or SATA) SSD storage 
 - Multiple USB ports (3.0 or greater preferred)
 - At least one gigabit (or better) ethernet port
-- Video display interface
 - Precision Time Protocol (PTP, IEEE 1588v2) support in ethernet controller (e.g. Intel i210)
 - Real Time Clock (RTC) with battery backup
 - Serial communications port (RS-232/RS-485/UART)
 - Wide input voltage tolerances
+- Video display interface (optional)
 
 Depending on the operating environment, it might be desirable to select a model that is rated for a wide operational temperature and humidity range. 
 
@@ -114,7 +114,7 @@ Some notes on the H3:
 Raspberry Pi <a href="https://investors.raspberrypi.com/" target="_blank">claims</a> that approximately 75% of its sales are to the Industrial and Embedded sector and their devices are found <a href="https://www.raspberrypi.com/for-industry/powered-by/" target="_blank">powering</a> a variety of devices in assorted applications that are similar or adjacent to MODAQ. Robustness and dependability are important to us, and is one of our stated design requirements, therefore we're cautiously optimistic when it comes to the CM5. Our experience thus far has been positive, however users are encouraged to perform their own evaluations and weigh the risks. 
 
 ![CM5](img/cm5_carrier.png#right)
-The CM5 is a credit-card sized microcomputer that needs to be inserted into a carrier or expansion board in order to expose the I/O, communications, storage, and power connections. This can increase the overall footprint and power draw, but since the CM5 is basically useless without a carrier board, they must be assessed together when evaluating options. In our tests, the CM5 with the <a href="https://www.raspberrypi.com/products/compute-module-5-io-board/" target="_blank">OEM carrier board</a> power draw under MODAQ operation was measured around 3 watts (NOTE: this power consumption value is just for the controller, not including any external peripherals such as the LabJack T8).
+The CM5 is a credit-card sized microcomputer that needs to be inserted into a carrier or expansion board in order to expose the I/O, communications, storage, and power connections. This can increase the overall footprint and power draw, but since the CM5 is basically useless without a carrier board, they must be assessed together when evaluating options. In our tests, the CM5 with the <a href="https://www.raspberrypi.com/products/compute-module-5-io-board/" target="_blank">OEM carrier board</a> power draw under MODAQ operation was measured around 3.4 watts (NOTE: this power consumption value is just for the controller, not including any external peripherals such as the LabJack T8).
 
 Notable features:
 
@@ -128,7 +128,7 @@ Notable disappointments:
 
 - No low power idle mode or hibernation/sleep
 - OEM carrier board is rather large (160 x 90mm) and only has one ethernet port
-- Published MTBF (Mean Time Between Failure) under high stress environmental conditions is 16k hours (~2 years). MTBF is closer to 10 years in stable, controlled conditions. (to be fair, we could not find published MTBF for the Karbon 410 nor the ODROID H3. The Karbon 410 does meet a variety of IEC and MIL-STD shock and vibration standards)
+- Published MTBF (Mean Time Between Failure) under high stress environmental conditions is <a href="https://pip-assets.raspberrypi.com/categories/944-raspberry-pi-compute-module-5/documents/RP-008180-DS-7-cm5-datasheet.pdf" target="_blank">16k hours</a> (~2 years at 24/7 duty). MTBF is closer to 10 years in stable, controlled conditions. (to be fair, we could not find published MTBF for the Karbon 410 nor the ODROID H3. The Karbon 410 does meet a variety of IEC and MIL-STD shock and vibration standards)
 
 ## Sensors, Instruments, and I/O Options
 
@@ -149,7 +149,7 @@ These provide the following capabilities:
 
 !!! note
 
-    The devices listed will work on either controller mentioned in the previous section.
+    The devices listed will work on all controllers mentioned in the previous section.
 
 M2 supports considerably more hardware options than are included in the Reference Design distribution. <a href="https://www.nlr.gov/water/open-water-testing" target="_blank">Contact us</a> to learn more. 
 
@@ -188,6 +188,8 @@ The M2 reference design includes support for the <a href="https://www.advancedna
 This device is a compliment to the Xsens Mti-G-710, since the GNSS Compass, with it's dual antennas can provide a superior heading estimate and with an RTK correction signal available, can provide can provide superior positioning estimates. In addition, it can provide an estimate of heave and provides a highly accurate time reference for the M2 system. 
 
 ### Networking
+We purposely designed the RD with simple, basic networking. On the plus side, this is cheap and requires no special configuration. It's also sufficiently fast for the selected components. However, in more elaborate builds, especially those with multiple PTP capable devices, a managed switch with PTP support will be more desirable. 
 
+The specified switch <a href="https://mundowin.com/en/How-to-configure-a-local-network-with-a-switch-without-internet/" target="_blank">does not have have a router</a>, so all devices will need to configured with a static IP address all on the same subnet. A laptop with an IP on the same subnet could be attached to one of the unused ethernet ports to access the [HMI](hmi.md).
 
 [^1]: The newly released ODROID H4 comes with <a href="https://www.intel.com/content/www/us/en/products/sku/210599/intel-ethernet-controller-i226v/specifications.html" target="_blank">Intel I226-V</a> ethernet controller chips, which have much better PTP support.
