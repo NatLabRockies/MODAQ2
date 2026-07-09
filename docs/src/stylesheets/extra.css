@@ -85,4 +85,14 @@ ul li {
   /*line-height: 0.5rem;*/
 }
 
-
+/* FIXME (size/appearance and dark mode): Add an icon to links that open in a new tab */
+a[target="_blank"]::after {
+  content: url(../img/new-tab-icon-20.png);
+  display: inline-block;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+  transform: scale(0.65);
+  /*width: 1em;
+  height: 1em; */
+}
+ 

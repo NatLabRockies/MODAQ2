@@ -171,7 +171,7 @@ Using a real-time architecture and approach in MODAQ allows better management of
 
 ### Latency
 
-Opening Task Manager in Windows or the equivalent in in other operating systems (OS), there may be hundreds of processes listed that are all vying for a slice of the CPU's time. These include things like device drivers, software updaters, user software, malware detectors, and lots of other things that comprise the modern computing experience. With fast, multi-core processors, these appear to be seamlessly juggled, usually with little delay apparent to the user. This is all managed by the scheduler and it tries to be fair as it doles out access to a CPU core. Under critical analysis, an application may have to wait a non-deterministic amount of time for that CPU attention- and that wait time might vary considerably for each request. This variation may be only a few milliseconds (or longer) but for DAQs running loops hundreds or several thousand times per second, that's an eternity. 
+Opening Task Manager in Windows or the equivalent in in other operating systems (OS), there may be hundreds of processes listed that are all vying for a slice of the CPU's time. These include things like device drivers, software updaters, user software, malware detectors, and lots of other things that comprise the modern computing experience. With fast, multi-core processors, these appear to be seamlessly juggled, usually with little delay apparent to the user. This is all managed by the scheduler and it tries to be fair as it doles out access to a CPU core. Under critical analysis, an application may have to wait a non-deterministic amount of time for that CPU attention- and that wait time might vary considerably for each request. This variation may be only a few milliseconds but for DAQs running loops hundreds or several thousand times per second, that's an eternity. 
  
 A properly configured real-time stack offers the software developer some tools to better manage how the real-time code gets its CPU time by preempting lower priority processes (jumping to the head of the line). The end effect is that the real-time code should experience less of this source of latency.
 
@@ -195,11 +195,11 @@ At the time of writing, it appears that the mainline Linux kernel is expected to
 
 Once a patched kernel has been installed and the necessary changes to BIOS have been made, it's necessary to conduct some tests on the system to validate the 'as-built' latency performance. 
 
-A very useful tool for this is provided by intel: <a href="https://eci.intel.com/docs/3.3/development/performance/benchmarks.html#about-rtpm" target="_blank">RTPM</a>. This tool will evaluate the settings on your computer to ensure they are optimized for real-time performance. It also will conduct several tests that will characterize your real-time performance.
+A very useful tool for this is provided by intel: <a href="https://eci.intel.com/docs/3.3/development/performance/benchmarks.html#about-rtpm" target="_blank">RTPM</a>. This tool will evaluate the settings on your computer to ensure they are optimized for real-time performance. It also will conduct several tests that will characterize your real-time performance. For Arm64, consider using available benchmarking tools such as <a href="https://wiki.linuxfoundation.org/realtime/documentation/howto/tools/cyclictest/start" target="_blank">cyclictest</a>. 
 
 ## Precision Time Protocol
 
-The promise of PTP is that all connected PTP-aware devices will be synchronized and reference-time accurate to 100's, if not 10's of nanoseconds- without drift. By comparison, <a href="https://en.wikipedia.org/wiki/Network_Time_Protocol" target="_blank">Network Time Protocol</a> (NTP), which is what most consumer computers and laptops use as a time reference, can at best achieve 10's of milliseconds accuracy. While NTP accuracy might be perfectly acceptable to some and often better than a real time clock (which can drift <a href="https://www.best-microcontroller-projects.com/ppm.html" target="-blank">several seconds a day</a>), it's a ~6 order of magnitude difference in accuracy as compared to PTP. If a quality time reference is not available, samples taken from input modules on the same DAQ controller will be disciplined by the same clock and will likely be <i>precisely</i> timestamped relative each other, but may not be <i>accurate</i> to actual time (i.e. UTC) . 
+The promise of PTP is that all connected PTP-aware devices will be synchronized and reference-time accurate to 100's, if not 10's of nanoseconds- without drift. By comparison, <a href="https://en.wikipedia.org/wiki/Network_Time_Protocol" target="_blank">Network Time Protocol</a> (NTP), which is what most consumer computers and laptops use as a time reference, can at best achieve 10's of milliseconds accuracy. While NTP accuracy might be perfectly acceptable to some and often better than a real time clock (which can drift <a href="https://www.best-microcontroller-projects.com/ppm.html" target="_blank">several seconds a day</a>), it's a ~6 order of magnitude difference in accuracy as compared to PTP. If a quality time reference is not available, samples taken from input modules on the same DAQ controller will be disciplined by the same clock and will likely be <i>precisely</i> timestamped relative each other, but may not be <i>accurate</i> to actual time (i.e. UTC) . 
 
 Where the real power of PTP is realized is in synchronizing samples taken by disparate systems. These can be DAQs on the same subnet, sharing the same master clock or systems completely disconnected from each other and separated miles apart. As long as each system is disciplined to a healthy PTP reference clock, the samples will be synchronized to the aforementioned nanosecond time precision. This is a boon for distributed architectures and system design flexibility, allowing multi-controller synchronization without physical interconnections. 
 
@@ -213,6 +213,182 @@ In our experience, PTP implementation either works magically or is a real bear. 
 These items need to be properly configured, otherwise the PTP performance may be degraded or non-existent. For instance, we've found that some cheap consumer unmanaged switches (such as the <a href="https://www.netgear.com/business/wired/switches/unmanaged/gs305/" target="_blank">Netgear GS305</a>) will pass PTP packets, however the observed PTP performance degrades to microsecond accuracy with large standard deviations. This is still pretty good and better than NTP, but not ideal and possibly not reliable. 
 
 The linux support for PTP can be installed using `sudo apt install linuxptp`. This enables the ptp4l tool which allows user interaction with the PTP hardware clocks on your controller's NIC.
+
+Command line startup of ptp4l (Intel controller):<br>
+
+=== "Intel"
+    ```zsh
+    sudo ptp4l -m -s -H -i enp2s0 #replace enp2s0 with the NIC of choice on your controller hardware
+    ```
+=== "RPi CM5"
+    ```zsh 
+    sudo ptp4l -m -s -H --ptp_minor_version 0 -i eth0
+    ```
+</p>
+
+ptp4l will run and display an output similar to this (use `ctrl-c` to quit):
+
+```zsh
+modaq@m2-controller:~$ sudo ptp4l -m -s -H -i enp2s0
+ptp4l[1576.346]: rms  228 max  382 freq -10480 +/- 259 delay  6276 +/-  37
+ptp4l[1577.347]: rms  302 max  595 freq -10570 +/- 340 delay  6350 +/-  43
+ptp4l[1578.347]: rms  165 max  286 freq -10514 +/- 191 delay  6364 +/-  25
+ptp4l[1579.347]: rms  437 max  634 freq -10263 +/- 455 delay  6281 +/-  27
+```
+The `rms` field tells us our timing accuracy in nanoseconds for the samples. In this case we're achieving <500 ns accuracy. This value may be higher or lower in order of magnitude depending on the hardware used, but the goal is to achieve <10 µs (10,000 ns) rms values and that they don't fluctuate wildly from sample to sample. 
+
+The role of ptp4l is to configure the PTP Hardware Clock (PHC) support and participate as a PTP client. However, to synchronize the PTP time to the system clock, an additional service is needed: `phc2sys`.  
+
+![](img/ptp_diagram.png#center)
+
+phc2sys is included in the linuxptp package installed earlier and can be run from the terminal as a test. For this to work, ptp4l must be running. Therefore, start ptp4l in one terminal window, open another terminal window and run phc2sys. In this example, the rms value of our system clock's accuracy is <500 ns.
+
+```zsh
+modaq@m2-controller:~$ sudo phc2sys -s enp2s0 -w -m -u 2
+phc2sys[1163.122]: CLOCK_REALTIME rms  384 max  386 freq  -9958 +/-  55 delay  1684 +/-   2
+phc2sys[1165.123]: CLOCK_REALTIME rms   95 max  126 freq -10228 +/-  67 delay  1683 +/-  10
+phc2sys[1167.124]: CLOCK_REALTIME rms  323 max  456 freq  -9950 +/- 220 delay  1656 +/-  36
+phc2sys[1169.125]: CLOCK_REALTIME rms  464 max  554 freq  -9514 +/-  18 delay  1690 +/-   6
+```
+### Running ptp4l and phc2sys as System Services
+In the previous example, ptp4l and phc2sys were running in the command line and while this works, they need to be manually started each time and occupy 2 terminal windows. Instead, we can make them into services that automatically run when the system boots up. 
+
+#### ptp4l
+To run as a service, there needs to be a valid `ptp4l.conf` file in `/etc/linuxptp/`. There should already be a file in that location, but it's probably configured wrong for this setup  (such as turning on both server and client stuff). Suggest copying this file elsewhere for safekeeping then delete the contents and replace with (where enp2s0 is replaced with your preferred NIC):
+
+=== "Intel"
+    ```zsh
+    [global]
+    time_stamping    hardware
+    clientOnly       1 # forces client mode, prevents assuming server role
+    clock_servo      linreg
+    logging_level    4 
+    summary_interval 5 # write to syslog every 2^5 seconds (32 seconds)
+    [enp2s0]
+    ```
+=== "RPi CM5"
+    ```zsh
+    [global]
+    time_stamping       hardware
+    clientOnly          1 # forces client mode, prevents assuming server role
+    clock_servo         linreg
+    logging_level       4
+    summary_interval    5 # write to syslog every 2^5 seconds (32 seconds)
+    ptp_minor_version   0 # this entry is important for ptp to work on the CM5
+    [eth0]
+    ```
+
+ptp4l has many more settings available than the few used in these examples- and even these settings may have multiple options. Consult the <a href="https://manpages.debian.org/unstable/linuxptp/ptp4l.8.en.html" target="_blank">ptp4l man pages</a> for more info. 
+
+To start the service: `sudo systemctl start ptp4l`
+
+To stop the service: `sudo systemctl stop ptp4l`
+
+To enable the ptp4l service to start at boot: `sudo systemctl enable ptp4l`
+
+To disable the ptp4l service starting at boot: `sudo systemctl disable ptp4l`
+
+!!! warning "Troubleshooting"
+    **Issue:** ptp4l will launch fine from command line, but will fail with systlog entries complaining about ioctl SIOCETHTOOL failed, PTP device not specified…, and/or failed to create a clock when run as a service.
+
+    **Solution:** (from: /usr/share/doc/linuxptp/README.debian):
+
+	1. Create a directory: /etc/systemd/system/ptp4l.service.d
+	2. In that directory, create a file with extension .conf (name does not really matter, call it ptp4l.conf for instance)
+	3. Place the following lines in the file, replacing eth0 with desired port for instance enp2s0:
+
+        ```zsh
+	    [Service]
+	    ExecStartPre=/bin/sleep 60 (NOTE: this is only needed if the start of ptp4l needs to be delayed- DO NOT PASTE THIS PART IN THE CONF FILE!!).   
+	    ExecStart=
+        ExecStart=/usr/sbin/ptp4l -f /etc/linuxptp/ptp4l.conf -i eth0
+        ```
+
+	4. Reboot and service should be able to start as expected
+
+    **Issue:** systemctl fails to launch with a Unit name ptp4l.service not found when trying to start ptp4l as a service: 
+
+    **Solution:** The ptp4l service file is misnamed. 
+    Open a terminal in /lib/systemd/system and type: `sudo cp ptp4l@.service ptp4l.service`
+
+#### phc2sys
+To run as a service, first need to edit: `/usr/lib/systemd/system/phc2sys.service`.
+
+**NOTE:** if phc2sys.service does not appear in the folder, but phc2sys@.service does, rename the file with this command in the terminal: `sudo cp phc2sys@.service phc2sys.service`
+
+Open a  terminal window in that folder and type: `sudo nano phc2sys.service` to open the file in a simple text editor.
+
+=== "Intel"
+    ```zsh
+    Edit the Execstart line to: 
+    Execstart=/usr/sbin/phc2sys -w -s enp2s0 -u 5
+
+    Save and exit nano. 
+    enp2s0 should be the ethernet port connected to the subnet with the master clock
+    -u 5 writes to the syslog every 5 seconds, you can change this for more or less 
+    logging as desired. 
+    ``` 
+=== "RPi CM5"
+    ```zsh
+    Edit the phc2sys.service file with the following: 
+    (note: everything should be the same except for changes to the ExecStart= line)
+    
+    [Unit]
+    Description=Synchronize system clock or PTP hardware clock (PHC)
+    Documentation=man:phc2sys
+    Requires=ptp4l.service
+    After=ptp4l.service
+    Before=time-sync.target
+    
+    [Service]
+    Type=simple
+    ExecStart=/usr/sbin/phc2sys -w -s eth0 -c CLOCK_REALTIME -u 300
+    
+    [Install]
+    WantedBy=multi-user.target
+    ```
+
+To start the service: `sudo systemctl start phc2sys`
+
+To stop the service: `sudo systemctl stop phc2sys`
+
+To enable the phc2sys service to start at boot: `sudo systemctl enable phc2sys`
+
+To disable the phc2sys service starting at boot: `sudo systemctl disable phc2sys`
+
+!!! warning "Troubleshooting"
+    The instructions above edits the ptp4l.service and phc2sys.service in locations that could get overridden by a software update. It may be necessary to use a 'drop-in' .conf file to override desired settings. This file will live in `/etc/systemd/system/<serviceName>.d/override.conf`, where <serviceName> would be either ptp4l.service or phc2sys.service, depending on which you're editing. The actual filename of the override file does not matter, as long as it lives in this folder and has the .conf extension. These steps may also be necessary if the services launch fine, but don't appear to be using the settings you configured.
+
+    The contents of the ptp4l.service.d/override.conf would like like this:
+    === "Intel"
+        ```zsh
+        [Service]
+        ExecStart=
+        ExecStart=/usr/sbin/ptp4l -f /etc/linuxptp/ptp4l.conf
+        ```
+    === "RPi CM5"
+        ```zsh
+        [Service]
+        ExecStart=
+        ExecStart=/usr/sbin/ptp4l -f /etc/linuxptp/ptp4l.conf -i eth0
+        ```
+
+    And the phc2sys.service.d/override.conf:
+    === "Intel"
+        ```zsh
+        [Service]
+        Execstart=
+        Execstart=/usr/sbin/phc2sys -w -s enp2s0 -u 5
+        ```
+    === "RPi CM5"
+        ```zsh
+        [Service]
+        Execstart=
+        Execstart=/usr/sbin/phc2sys -w -s eth0 -u 5
+        ```
+
+    NOTE: the blank Execstart= serves to clear or reset the value placed by the original service file that is being overridden. 
+
 
 ## Parsing MCAP Files
 The mcap file format was designed by Foxglove  and they also developed a GUI software that is able to process these data files and output plots, tables and other useful visualizers. For information on this GUI viewer, please see [Useful Links](links.md#ubuntu).
